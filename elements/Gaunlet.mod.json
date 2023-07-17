@@ -15,7 +15,7 @@
       "value": ""
     },
     "shootConstantly": false,
-    "usageCount": 0,
+    "usageCount": 500,
     "actionSound": {
       "value": "CUSTOM:bullet"
     },
@@ -29,9 +29,9 @@
     "bulletParticles": false,
     "bulletIgnitesFire": false,
     "bulletItemTexture": {
-      "value": "CUSTOM:Claw"
+      "value": ""
     },
-    "bulletModel": "Default",
-    "customBulletModelTexture": ""
+    "bulletModel": "ModelGauntletMetal",
+    "customBulletModelTexture": "gauntlet_metal_entity.png"
   }
 }

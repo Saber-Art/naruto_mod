@@ -196,6 +196,9 @@ public class EntitySuitonShark extends ElementsNarutomodMod.ModElement {
 		protected void onImpact(RayTraceResult result) {
 			if (result.entityHit != null && result.entityHit.equals(this.shootingEntity))
 				return;
+			if (result.typeOfHit == RayTraceResult.Type.BLOCK && this.fullScale >= 2.0f && this.ticksInAir <= 15) {
+				return;
+			}
 			if (!this.world.isRemote) {
 				if (result.typeOfHit == RayTraceResult.Type.BLOCK
 				 || (result.entityHit != null && result.entityHit.equals(this.target))) {

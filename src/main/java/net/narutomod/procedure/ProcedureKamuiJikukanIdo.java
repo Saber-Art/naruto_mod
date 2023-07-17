@@ -99,6 +99,10 @@ public class ProcedureKamuiJikukanIdo extends ElementsNarutomodMod.ModElement {
 					((EntityPlayer) entity).capabilities.allowEdit = (!(f2));
 					((EntityPlayer) entity).sendPlayerAbilities();
 				}
+				if (entity instanceof EntityPlayer) {
+					((EntityPlayer) entity).capabilities.isFlying = (f2);
+					((EntityPlayer) entity).sendPlayerAbilities();
+				}
 				ProcedureOnLivingUpdate.setNoClip(entity, f2);
 				if (entity instanceof EntityPlayer && !entity.world.isRemote) {
 					((EntityPlayer) entity).sendStatusMessage(new TextComponentString(
@@ -163,7 +167,7 @@ public class ProcedureKamuiJikukanIdo extends ElementsNarutomodMod.ModElement {
 							if (((i) > 0)) {
 								i = (double) ((i)
 										* ((t.entityHit instanceof EntityLivingBase) ? ((EntityLivingBase) t.entityHit).getMaxHealth() : -1));
-								t.entityHit.attackEntityFrom(DamageSource.OUT_OF_WORLD.setDamageIsAbsolute(), Math.max((float) i, 1024f));
+								t.entityHit.attackEntityFrom(DamageSource.OUT_OF_WORLD.setDamageIsAbsolute(), Math.min((float) i, 1024f));
 							}
 						} else {
 							ProcedureKamuiTeleportEntity.eEntity(t.entityHit, x, z, dimid);

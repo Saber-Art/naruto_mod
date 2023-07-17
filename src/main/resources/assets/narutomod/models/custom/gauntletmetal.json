@@ -5497,7 +5497,7 @@
       "color": 0,
       "children": [
         {
-          "name": "group",
+          "name": "arm",
           "origin": [
             8,
             8,
@@ -5589,7 +5589,7 @@
           ]
         },
         {
-          "name": "group",
+          "name": "claw",
           "origin": [
             9.20711,
             2,

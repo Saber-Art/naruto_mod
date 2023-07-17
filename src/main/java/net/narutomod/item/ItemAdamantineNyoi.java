@@ -5,6 +5,7 @@ import net.narutomod.procedure.ProcedureUtils;
 import net.narutomod.entity.EntityAdamantinePrison;
 import net.narutomod.entity.EntityScalableProjectile;
 import net.narutomod.entity.EntityRendererRegister;
+import net.narutomod.Particles;
 import net.narutomod.ElementsNarutomodMod;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -17,9 +18,11 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 
 import net.minecraft.world.World;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -43,11 +46,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.nbt.NBTTagCompound;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Predicate;
 import javax.annotation.Nullable;
 import java.util.UUID;
+import java.util.Map;
 
 @ElementsNarutomodMod.ModElement.Tag
 public class ItemAdamantineNyoi extends ElementsNarutomodMod.ModElement {
@@ -77,19 +82,25 @@ public class ItemAdamantineNyoi extends ElementsNarutomodMod.ModElement {
 	}
 
 	public static ItemStack createStackBoundTo(EntityPlayer player) {
-		ItemStack stack1 = new ItemStack(block);
-		RangedItem item = (RangedItem)stack1.getItem();
-		item.setOwner(stack1, player);
-		item.setIsAffinity(stack1, true);
-		item.addJutsuXp(stack1, WEAPON, item.getRequiredXp(stack1, WEAPON));
-		item.addJutsuXp(stack1, EXTEND, item.getRequiredXp(stack1, EXTEND));
-		item.addJutsuXp(stack1, PRISON, item.getRequiredXp(stack1, PRISON));
-		stack1.getTagCompound().setLong("1stGottenTime", player.world.getTotalWorldTime());
-		return stack1;
+		ItemStack stack = ProcedureUtils.getMatchingItemStack(player, ItemSummoningContract.block);
+		if (stack != null && stack.hasTagCompound() && stack.getTagCompound().hasKey("AdamantineNyoiItemstack", 10)) {
+			stack = new ItemStack(stack.getTagCompound().getCompoundTag("AdamantineNyoiItemstack"));
+		} else {
+			stack = new ItemStack(block);
+			RangedItem item = (RangedItem)stack.getItem();
+			item.setOwner(stack, player);
+			item.setIsAffinity(stack, true);
+			item.addJutsuXp(stack, WEAPON, item.getRequiredXp(stack, WEAPON));
+			item.addJutsuXp(stack, EXTEND, item.getRequiredXp(stack, EXTEND));
+			item.addJutsuXp(stack, PRISON, item.getRequiredXp(stack, PRISON));
+		}
+		stack.getTagCompound().setLong("1stGottenTime", player.world.getTotalWorldTime());
+		return stack;
 	}
 
 	public static class RangedItem extends ItemJutsu.Base implements ItemOnBody.Interface {
 		private static final UUID REACH_MODIFIER = UUID.fromString("2181075f-90e8-4444-9143-788f588ef58f");
+		private static final float DAMAGE = 18.0f;
 
 		public RangedItem(ItemJutsu.JutsuEnum... list) {
 			super(ItemJutsu.JutsuEnum.Type.OTHER, list);
@@ -105,7 +116,7 @@ public class ItemAdamantineNyoi extends ElementsNarutomodMod.ModElement {
 		public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot slot) {
 			Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(slot);
 			if (slot == EntityEquipmentSlot.MAINHAND) {
-				multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Ranged item modifier", (double) 17, 0));
+				multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Ranged item modifier", DAMAGE - 1, 0));
 				multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Ranged item modifier", -2.4, 0));
 				multimap.put(EntityPlayer.REACH_DISTANCE.getName(), new AttributeModifier(REACH_MODIFIER, "Tool modifier", 1.5d, 0));
 			}
@@ -139,6 +150,13 @@ public class ItemAdamantineNyoi extends ElementsNarutomodMod.ModElement {
 		public void onUpdate(ItemStack itemstack, World world, Entity entity, int par4, boolean par5) {
 			super.onUpdate(itemstack, world, entity, par4, par5);
 			if (!world.isRemote && world.getTotalWorldTime() > itemstack.getTagCompound().getLong("1stGottenTime") + 6000) {
+				if (entity instanceof EntityPlayer) {
+					ItemStack stack = ProcedureUtils.getMatchingItemStack((EntityPlayer)entity, ItemSummoningContract.block);
+					if (stack != null && stack.hasTagCompound()) {
+						stack.getTagCompound().setTag("AdamantineNyoiItemstack", itemstack.writeToNBT(new NBTTagCompound()));
+					}
+				}
+				ProcedureUtils.poofWithSmoke(entity);
 				itemstack.shrink(1);
 			}
 		}
@@ -199,6 +217,7 @@ public class ItemAdamantineNyoi extends ElementsNarutomodMod.ModElement {
 		private final float lengthMultiplier = 2.0f;
 		private double renderTick;
 		private boolean checked;
+		private final float damage = RangedItem.DAMAGE;
 		private final ProcedureUtils.CollisionHelper collisionhelper = new ProcedureUtils.CollisionHelper(this);
 
 		public EntityExtend(World a) {
@@ -273,24 +292,18 @@ public class ItemAdamantineNyoi extends ElementsNarutomodMod.ModElement {
 	        return p_75652_1_ + f;
 	    }
 
-	    private void resetSegmentsCheckFlag() {
-			if (this.segment[0] != null) {
-				for (int i = 1; i < this.segment.length; i++) {
-					this.segment[i].checked = false;
-				}
-			}
-	    }
-
 		private void setSegmentPosition() {
 			EntityLivingBase shooter = this.getShooter();
 			if (!this.world.isRemote && shooter != null) {
 				float scale = this.getEntityScale();
-				this.resetSegmentsCheckFlag();
 				Vec3d vec0 = shooter.getLookVec();
 				Vec3d frontLook = Vec3d.fromPitchYaw(this.updateRotation(this.rotationPitch, ProcedureUtils.getPitchFromVec(vec0), 5.0f),
 				 this.updateRotation(this.rotationYaw, ProcedureUtils.getYawFromVec(vec0), 5.0f));
 				Vec3d frontVec = frontLook.add(shooter.getPositionVector().addVector(0d, 1.1d - scale * 0.0625f, 0d));
 				if (this.segment[0] != null) {
+					for (int i = 1; i < this.segment.length; i++) {
+						this.segment[i].checked = false;
+					}
 					for (int i = 1; i < this.segment.length; i++) {
 						Vec3d vec = frontLook.scale(scale * this.lengthMultiplier * 3.75f * i / this.segment.length).add(frontVec);
 						this.segment[i].setEntityScale(scale);
@@ -305,14 +318,20 @@ public class ItemAdamantineNyoi extends ElementsNarutomodMod.ModElement {
 								}
 							});
 							Vec3d vec2 = this.segment[i].collisionhelper.getUpdatedMotion();
-							for (Entity entity : this.segment[i].collisionhelper.getEntitiesHit()) {
-								ProcedureUtils.addVelocity(entity, vec2);
+							float f = MathHelper.sqrt((float)vec2.lengthVector() * scale);
+							for (Map.Entry<Entity, EnumFacing> entry : this.segment[i].collisionhelper.getEntitiesHitMap().entrySet()) {
+								entry.getKey().attackEntityFrom(DamageSource.causeIndirectDamage(this, shooter), f * this.damage * 1.75f);
+								ProcedureUtils.CollisionHelper.reposHitEntity(this.segment[i].getEntityBoundingBox().offset(vec2), entry.getKey(), entry.getValue());
+								entry.getKey().addVelocity(vec2.x, vec2.y, vec2.z);
+								entry.getKey().velocityChanged = true;
 							}
 							if (this.segment[i].collisionhelper.anyBlockHits()) {
-								float f = MathHelper.sqrt((float)vec2.lengthVector() * scale);
-								if (f >= 2.5f) {
-									this.world.createExplosion(shooter, this.segment[i].posX, this.segment[i].posY, this.segment[i].posZ,
-									 f, net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, shooter));
+								if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, shooter)) {
+									for (BlockPos pos : this.segment[i].collisionhelper.getHitBlocks()) {
+										if (this.world.getBlockState(pos).getBlockHardness(this.world, pos) <= f) {
+											this.world.destroyBlock(pos, this.rand.nextFloat() < 0.1f);
+										}
+									}
 								}
 								for (EnumFacing face : EnumFacing.VALUES) {
 									if (this.segment[i].collisionhelper.hitOnSide(face)) {
@@ -337,9 +356,16 @@ public class ItemAdamantineNyoi extends ElementsNarutomodMod.ModElement {
 		@Override
 		public void setDead() {
 			super.setDead();
-			if (!this.world.isRemote && this.segment[0] != null) {
-				for (int i = 1; i < this.segment.length; i++) {
-					this.segment[i].setDead();
+			if (!this.world.isRemote) {
+				if (this.getSegmentIndex() == 0) {
+					this.playSound(net.minecraft.util.SoundEvent.REGISTRY.getObject(new ResourceLocation("narutomod:poof")), 1f, 1f);
+				}
+				Particles.spawnParticle(this.world, Particles.Types.SMOKE, this.posX, this.posY+this.height/2, this.posZ, 5,
+				 this.width * 0.5d, this.height * 0.3d, this.width * 0.5d, 0d, 0d, 0d, 0xD0FFFFFF, (int)(this.getEntityScale() * 10));
+				if (this.segment[0] != null) {
+					for (int i = 1; i < this.segment.length; i++) {
+						this.segment[i].setDead();
+					}
 				}
 			}
 		}
@@ -374,22 +400,6 @@ public class ItemAdamantineNyoi extends ElementsNarutomodMod.ModElement {
 		public boolean isImmuneToExplosions() {
 			return true;
 		}
-
-		/*@Override
-		protected void readEntityFromNBT(NBTTagCompound compound) {
-			super.readEntityFromNBT(compound);
-			String s = compound.getString("frontUUID");
-			if (!s.isEmpty()) {
-				this.dataManager.set(FRONT, Optional.fromNullable(UUID.fromString(s)));
-			}
-		}
-
-		@Override
-		protected void writeEntityToNBT(NBTTagCompound compound) {
-			super.writeEntityToNBT(compound);
-			UUID uuid = this.getFrontUuid();
-			compound.setString("frontUUID", uuid == null ? "" : uuid.toString());
-		}*/
 
 		public static class Jutsu implements ItemJutsu.IJutsuCallback {
 			@Override

@@ -20,6 +20,15 @@ Jutsus:
  - chakra enhanced strength should only activate on melee attacks
  - lava melting jutsu must be charged to at least 1.0 to use
  - storm release thunder cloud no longer stuns enemy
+ - nerfed earth sandwich damage by 50%
+ - large projectiles will ignore blocks within 15 ticks
+ - faster ice spears and sand binding
+ - kirin will be auto unlocked when player fully learns chidori
+ - better kamui intangible maneuverability (flying)
+ - senpo big ball rasengan, ultra rasenshuriken and 6-path truth seeking rasenshuriken now causes senjutsu damage
+ - fixed kamui teleport damaging 1024 bug, now max is 1024 damage
+ - truth seeking orbs can only be damaged when launched or becomes a shield
+ - updated sand bullets particle effects
 
 Items:
  - fixed explosive tags breaking blocks when mobGriefing false
@@ -27,11 +36,16 @@ Items:
  - Ramen is now craftable and gives 25 seconds saturation
  - simplified hiraishin/3-prong kunai model to reduce client lag on rendering marker/kunai
  - fixed kiba sword duplication bug
- - implemented adamantine staff, can block, added extend and adamantine prison. 5 minutes duration
+ - implemented adamantine staff, can block, extend and adamantine prison. 5 minutes duration
  - lowered armor protection values for dojutsus
  - fixed 6-path armor only showing obito variant to other players
  - fixed dropping owner free kg items
  - re-modeled hiramekarei sword
+ - added Metal gauntlet and recipe, shoots claw connected to a chain, right click to pull
+ - added chakra blades recipe
+ - removed rasenshuriken scroll (its enabled when rasengan is fully learned)
+ - better kusanagi sword's entity targeting
+ - added recipies for posion bomb, poison senbon, and senbon puppet arm
  
 Entities:
  - re-textured white zetsu, itachi
@@ -41,10 +55,13 @@ Entities:
  - added ambient sounds for shukaku, songoku, chomei, isobu
  - fixed player's outer skin layer not synced with arms when naruto running
  - added Enma summon (use summon jutsu on Enma to turn him into the staff)
+ - increased itachi/kisame/zabuza spawn chances based on spawn weight
+ - fixed gedo mazo crash when attacked
 
 General:
  - resets tailed beasts spawn point if natural spawning is disabled in config
  - better naruto run
+ - reduced camera shake radius on custom explosions
 
 0.2.12-beta ===============================================================================
 
