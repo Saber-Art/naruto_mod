@@ -81,10 +81,10 @@ public abstract class ProcedureAirPunch {
 				for (RayTraceResult result : this.affectedTraceList) {
 					if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
 						BlockPos pos = result.getBlockPos();
-						EntityItem entityItem = this.processAffectedBlock(player, pos, result.sideHit);
-						this.breakBlockParticles(world, pos);
-						if (entityItem != null)
-							list.add(entityItem);
+						//EntityItem entityItem = this.processAffectedBlock(player, pos, result.sideHit);
+						//this.breakBlockParticles(world, pos);
+						//if (entityItem != null)
+						//	list.add(entityItem);
 					} else if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
 						list.add(result.entityHit);
 					}

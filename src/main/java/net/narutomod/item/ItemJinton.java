@@ -108,7 +108,7 @@ public class ItemJinton extends ElementsNarutomodMod.ModElement {
 
 		private float getMaxUsablePower(EntityLivingBase entity, ItemStack stack) {
 			float max = entity instanceof EntityPlayer ? (float)(PlayerTracker.getNinjaLevel((EntityPlayer)entity)-MIN_PLAYER_XP+5)/5 : 6;
-			return MathHelper.clamp(max, 0f, this.getCurrentJutsu(stack) == BEAM ? 10f : 50f);
+			return MathHelper.clamp(max, 0f, this.getCurrentJutsu(stack) == BEAM ? 10f : 200f);
 		}
 
 		private float getUsePercent(int timeLeft) {
@@ -301,15 +301,15 @@ public class ItemJinton extends ElementsNarutomodMod.ModElement {
 		        int j3 = MathHelper.floor(bb.minZ);
 		        int k3 = MathHelper.ceil(bb.maxZ);
 		        BlockPos.PooledMutableBlockPos pos = BlockPos.PooledMutableBlockPos.retain();
-		        for (int l3 = j2; l3 < k2; ++l3) {
-		            for (int i4 = l2; i4 < i3; ++i4) {
-		                for (int j4 = j3; j4 < k3; ++j4) {
-							if (!this.world.isAirBlock(pos.setPos(l3, i4, j4))) {
-								this.world.setBlockToAir(pos);
-							}
-		                }
-		            }
-		        }
+		        //for (int l3 = j2; l3 < k2; ++l3) {
+		        //    for (int i4 = l2; i4 < i3; ++i4) {
+		        //        for (int j4 = j3; j4 < k3; ++j4) {
+				//			if (!this.world.isAirBlock(pos.setPos(l3, i4, j4))) {
+				//				this.world.setBlockToAir(pos);
+				//			}
+		        //        }
+		        //    }
+		        //}
 		        pos.release();
 			}
 			for (Entity entity : this.world.getEntitiesWithinAABBExcludingEntity(this, bb)) {

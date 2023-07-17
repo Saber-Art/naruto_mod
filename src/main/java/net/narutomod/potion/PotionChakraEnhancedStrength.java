@@ -120,7 +120,7 @@ public class PotionChakraEnhancedStrength extends ElementsNarutomodMod.ModElemen
 				Vec3d vec1 = player.getPositionVector().addVector(0d, 1.2d, 0d).add(vec);
 				Vec3d vec2 = vec.scale(this.getRange(0));
 				double d = MathHelper.atan2(this.getFarRadius(0), this.getRange(0));
-				for (int i = 0; i < (int)(this.getRange(0) * 50); i++) {
+				for (int i = 0; i < (int)(this.getRange(0) * 20); i++) {
 					//Vec3d vec3 = vec2.scale((this.rand.nextDouble() * 0.17d) + 0.03d)
 					 //.addVector((this.rand.nextDouble() - 0.5d) * this.getFarRadius(0) * 0.15d,
 					 //(this.rand.nextDouble() - 0.5d) * this.getFarRadius(0) * 0.15d, 
@@ -133,9 +133,11 @@ public class PotionChakraEnhancedStrength extends ElementsNarutomodMod.ModElemen
 				}
 				for (int i = 1, j = (int)(this.getRange(0) * 2.5d); i <= j; i++) {
 					Vec3d vec3 = vec2.scale(-0.0012d * i);
-					Particles.spawnParticle(player.world, Particles.Types.SONIC_BOOM, vec1.x, vec1.y, vec1.z,
-					 1, 0d, 0d, 0d, vec3.x, vec3.y, vec3.z, 0x00ffffff | ((int)((1f-(float)i/j)*0x40)<<24), i,
-					 (int)(5f * (1f + ((float)i/j) * 0.5f)));
+					if (Math.random() < 0.5) {
+						Particles.spawnParticle(player.world, Particles.Types.SONIC_BOOM, vec1.x, vec1.y, vec1.z,
+								1, 0d, 0d, 0d, vec3.x, vec3.y, vec3.z, 0x00ffffff | ((int)((1f-(float)i/j)*0x40)<<24), i,
+								(int)(5f * (1f + ((float)i/j) * 0.5f)));
+					}
 				}
 			}
 
@@ -143,9 +145,9 @@ public class PotionChakraEnhancedStrength extends ElementsNarutomodMod.ModElemen
 			protected EntityItem processAffectedBlock(EntityLivingBase player, BlockPos pos, EnumFacing facing) {
 				if (this.griefing && player.world.getBlockState(pos).isFullBlock()
 				 && player.world.getBlockState(pos.up()).getCollisionBoundingBox(player.world, pos.up()) == Block.NULL_AABB) {
-					EntityFallingBlock entity = new EntityFallingBlock(player.world, 0.5d+pos.getX(), pos.getY(), 0.5d+pos.getZ(), player.world.getBlockState(pos));
-					entity.motionY = 0.45d;
-					player.world.spawnEntity(entity);
+					//EntityFallingBlock entity = new EntityFallingBlock(player.world, 0.5d+pos.getX(), pos.getY(), 0.5d+pos.getZ(), player.world.getBlockState(pos));
+					//entity.motionY = 0.45d;
+					//player.world.spawnEntity(entity);
 				}
 				return super.processAffectedBlock(player, pos, facing);
 			}

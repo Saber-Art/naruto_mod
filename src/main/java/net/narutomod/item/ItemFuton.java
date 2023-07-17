@@ -196,8 +196,8 @@ public class ItemFuton extends ElementsNarutomodMod.ModElement {
 					}
 					return false;
 				} else {
-					if (ItemRaiton.CHAKRAMODE.jutsu.isActivated(entity)) {
-						ItemRaiton.CHAKRAMODE.jutsu.deactivate(entity);
+					if (ItemSpeedy.CHAKRAMODE.jutsu.isActivated(entity)) {
+						ItemSpeedy.CHAKRAMODE.jutsu.deactivate(entity);
 					}
 					if (ItemRaiton.CHIDORI.jutsu.isActivated(entity)) {
 						ItemRaiton.CHIDORI.jutsu.deactivate(entity);

@@ -1,6 +1,8 @@
 
 package net.narutomod.entity;
 
+import net.minecraft.init.MobEffects;
+import net.minecraft.util.DamageSource;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
@@ -73,7 +75,8 @@ public class EntitySandBind extends ElementsNarutomodMod.ModElement {
 		private ItemJiton.SwarmTarget sandTarget;
 		private Vec3d capturedVec;
 		private int funeralTime;
-		private final float funeralDamage = 4f; // per tick for 20 ticks
+		private boolean touchedTarget = false;
+		private final float funeralDamage = 7f; // per tick for 20 ticks
 		private static final int MAXTIME = 600;
 
 		public EC(World world) {
@@ -89,8 +92,8 @@ public class EntitySandBind extends ElementsNarutomodMod.ModElement {
 			this.targetEntity = targetIn;
 			Vec3d vec = this.getGourdMouthPos();
 			this.setPosition(vec.x, vec.y, vec.z);
-			this.sandTarget = new ItemJiton.SwarmTarget(this.world, 100, vec, 
-			 this.getTargetVector(), new Vec3d(0.1d, 0.4d, 0.1d), 0.95f, 0.03f, false, 2f, sandType.getColor());
+			this.sandTarget = new ItemJiton.SwarmTarget(this.world, 10, vec,
+			 this.getTargetVector(), new Vec3d(0.1d, 0.4d, 0.1d), 2f, 0f, false, 2f, sandType.getColor());
 		}
 
 		@Override
@@ -120,6 +123,8 @@ public class EntitySandBind extends ElementsNarutomodMod.ModElement {
 				//flag = d > this.targetEntity.getEntityBoundingBox().getAverageEdgeLength() * 0.5d 
 				// && d > this.getEntityBoundingBox().getAverageEdgeLength() * 0.2d;
 				AxisAlignedBB bb = this.getEntityBoundingBox().intersect(this.targetEntity.getEntityBoundingBox());
+
+				this.touchedTarget = true;
 				flag = bb.equals(this.targetEntity.getEntityBoundingBox())
 				 && this.getEntityBoundingBox().getAverageEdgeLength() < this.targetEntity.getEntityBoundingBox().getAverageEdgeLength() * 1.5d;
 			}
@@ -130,6 +135,7 @@ public class EntitySandBind extends ElementsNarutomodMod.ModElement {
 			}
 			return flag;
 		}
+
 
 		public void sandFuneral() {
 			this.funeralTime = 20;
@@ -175,7 +181,15 @@ public class EntitySandBind extends ElementsNarutomodMod.ModElement {
 
 		@Override
 		public void onUpdate() {
-			if (this.user != null && this.user.isEntityAlive() 
+
+			if (this.user != null && this.user.isEntityAlive()) {
+				if (this.touchedTarget && this.targetEntity != null) {
+					EntityLivingBase entity = this.targetEntity;
+					this.targetEntity.addPotionEffect(new PotionEffect(PotionParalysis.potion, 2, 0, false, false));
+				}
+			}
+
+			if (this.user != null && this.user.isEntityAlive()
 			 && this.sandTarget != null && !this.sandTarget.shouldRemove() && this.targetEntity != null) {
 				if (this.targetEntity.isEntityAlive() && this.funeralTime != 0 && this.ticksExisted < MAXTIME) {
 					if (this.isTargetCaptured()) {
@@ -252,7 +266,7 @@ public class EntitySandBind extends ElementsNarutomodMod.ModElement {
 	public static boolean sandFuneral(EntityLivingBase attacker) {
 		RayTraceResult res = ProcedureUtils.objectEntityLookingAt(attacker, 50, true);
 		if (res != null && res.entityHit instanceof EC && ((EC)res.entityHit).canFuneral()
-		 && Chakra.pathway(attacker).consume(50d)) {
+		 && Chakra.pathway(attacker).consume(500d)) {
 			attacker.world.playSound(null, attacker.posX, attacker.posY, attacker.posZ,
 			 net.minecraft.util.SoundEvent.REGISTRY.getObject(new ResourceLocation("narutomod:sabakusoso")),
 			 net.minecraft.util.SoundCategory.PLAYERS, 1f, 1f);

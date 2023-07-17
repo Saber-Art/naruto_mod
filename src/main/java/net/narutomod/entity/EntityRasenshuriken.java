@@ -135,7 +135,7 @@ public class EntityRasenshuriken extends ElementsNarutomodMod.ModElement {
 				new EventSphericalExplosion(this.world, null, (int)Math.floor(this.impactVec.x), (int)this.impactVec.y, 
 				  (int)Math.floor(this.impactVec.z), (int) Math.ceil(this.width/2) + 1, 0, 0f, false, false);
 				Particles.Renderer particles = new Particles.Renderer(this.world);
-				for (int i = 0; i < 300; i++) {
+				for (int i = 0; i < 20; i++) {
 					particles.spawnParticles(Particles.Types.SMOKE, this.posX, this.posY+this.height*0.5, this.posZ,
 					  1, 1d, 0d, 1d, (this.rand.nextDouble()-0.5d) * this.fullScale * 2.0d,
 					  0.5d * this.rand.nextGaussian(), 2.0d * (this.rand.nextDouble()-0.5d) * this.fullScale,
@@ -161,7 +161,8 @@ public class EntityRasenshuriken extends ElementsNarutomodMod.ModElement {
 			}
 			if (!this.world.isRemote && this.shootingEntity != null) {
 				if (this.ticksAlive < this.growTime) {
-					this.setEntityScale(this.fullScale * (this.ticksAlive + 1) / this.growTime);
+					float scale = (this.fullScale * (this.ticksAlive + 1) / this.growTime);
+					this.setEntityScale(scale);
 					this.setPosition(this.shootingEntity.posX, this.shootingEntity.posY + this.shootingEntity.height + 0.5d, this.shootingEntity.posZ);
 				/*} else if (this.ticksAlive == this.growTime && this.shootingEntity != null) {
 					Vec3d vec3d = this.shootingEntity.getLookVec();
@@ -174,7 +175,7 @@ public class EntityRasenshuriken extends ElementsNarutomodMod.ModElement {
 				}
 			}
 			Particles.Renderer particles = new Particles.Renderer(this.world);
-			for (int i = 0; i < Math.min(this.ticksAlive, this.growTime) * 10; i++) {
+			for (int i = 0; i < Math.min(this.ticksAlive, this.growTime) * 1.5; i++) {
 				particles.spawnParticles(Particles.Types.SMOKE, this.posX, this.posY+this.height*0.5, this.posZ, 1, 1d, 0d, 1d, 
 				  0.6d * this.rand.nextGaussian(), 0.1d * this.rand.nextGaussian(), 0.6d * this.rand.nextGaussian(), 0x10FFFFFF,
 				  (int)(this.fullScale * 12), 0);

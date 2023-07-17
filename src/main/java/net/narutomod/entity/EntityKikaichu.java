@@ -1,6 +1,9 @@
 
 package net.narutomod.entity;
 
+import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
@@ -49,7 +52,8 @@ public class EntityKikaichu extends ElementsNarutomodMod.ModElement {
 	@Override
 	public void initElements() {
 		elements.entities.add(() -> EntityEntryBuilder.create().entity(EntityCustom.class)
-		 .id(new ResourceLocation("narutomod", "kikaichu"), ENTITYID).name("kikaichu").tracker(64, 3, true).build());
+		 .id(new ResourceLocation("narutomod", "kikaichu"), ENTITYID)
+.name("kikaichu").tracker(64, 3, true).build());
 		elements.entities.add(() -> EntityEntryBuilder.create().entity(EC.class)
 		 .id(new ResourceLocation("narutomod", "bugball"), ENTITYID_RANGED).name("bugball").tracker(64, 3, true).build());
 	}
@@ -92,7 +96,7 @@ public class EntityKikaichu extends ElementsNarutomodMod.ModElement {
 			this.target = targetIn;
 			Vec3d vec = this.getUserVector();
 			this.setPosition(vec.x, vec.y, vec.z);
-			this.bugsTarget = new ItemJiton.SwarmTarget(this.world, (int)(power * 50), vec,
+			this.bugsTarget = new ItemJiton.SwarmTarget(this.world, (int)(power * 25), vec,
 			 this.getTargetVector(), new Vec3d(0.4d, 0.4d, 0.4d), 0.6f, 0.05f, false, 1f, -1) {
 				@Override
 				protected Entity createParticle(double x, double y, double z, double mx, double my, double mz, int c, float sc, int life) {
@@ -281,7 +285,9 @@ public class EntityKikaichu extends ElementsNarutomodMod.ModElement {
 				for (EntityLivingBase entity : this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox())) {
 					if (!entity.equals(this.host)) {
 						if (this.chakra < 100d && Chakra.pathway(entity).consume(0.25d)) {
-							this.chakra += 0.25d;
+							this.chakra += 0.5d;
+							entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 20, 4));
+							entity.attackEntityFrom(DamageSource.GENERIC, 0.5F);
 						}
 					} else if (this.chakra > 0.0d) {
 						Chakra.pathway(this.host).consume(-this.chakra);
@@ -350,11 +356,12 @@ public class EntityKikaichu extends ElementsNarutomodMod.ModElement {
                 f5 = 1.0F;
             }
 			this.bindEntityTexture(entity);
+			float scale = 0.15F;
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y + 0.03125d, z);
 			GlStateManager.rotate(-entity.prevRotationYaw - (entity.rotationYaw - entity.prevRotationYaw) * partialTicks, 0.0F, 1.0F, 0.0F);
 			GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks - 180.0F, 1.0F, 0.0F, 0.0F);
-			GlStateManager.scale(0.1F, 0.1F, 0.1F);
+			GlStateManager.scale(scale, scale, scale);
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			this.model.render(entity, f6, f5, 0.0F, 0.0F, 0.0F, 0.0625F);

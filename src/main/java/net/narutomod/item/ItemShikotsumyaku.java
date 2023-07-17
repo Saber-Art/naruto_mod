@@ -40,12 +40,15 @@ public class ItemShikotsumyaku extends ElementsNarutomodMod.ModElement {
 	@GameRegistry.ObjectHolder("narutomod:shikotsumyaku")
 	public static final Item block = null;
 	public static final int ENTITYID = 318;
-	public static final ItemJutsu.JutsuEnum LARCH = new ItemJutsu.JutsuEnum(0, "tooltip.shikotsumyaku.dancelarch", 'S', 150, 100d, new LarchDance());
-	public static final ItemJutsu.JutsuEnum WILLOW = new ItemJutsu.JutsuEnum(1, "tooltip.shikotsumyaku.dancewillow", 'S', 150, 100d, new WillowDance());
-	public static final ItemJutsu.JutsuEnum CAMELLIA = new ItemJutsu.JutsuEnum(2, "tooltip.shikotsumyaku.dancecamellia", 'S', 150, 100d, new CamelliaDance());
-	public static final ItemJutsu.JutsuEnum BULLETS = new ItemJutsu.JutsuEnum(3, "finger_bone", 'S', 150, 5d, new EntityFingerBone.EC.Jutsu());
-	public static final ItemJutsu.JutsuEnum CFLOWER = new ItemJutsu.JutsuEnum(4, "tooltip.shikotsumyaku.danceclementisflower", 'S', 400, 500d, new ClementisFlower());
-	public static final ItemJutsu.JutsuEnum BRACKEN = new ItemJutsu.JutsuEnum(5, "entitybrackendance", 'S', 400, 20d, new EntityBrackenDance.Jutsu());
+
+	//public static final ItemJutsu.JutsuEnum LARCH = new ItemJutsu.JutsuEnum(0, "tooltip.shikotsumyaku.dancelarch", 'S', 150, 100d, new LarchDance());
+	//public static final ItemJutsu.JutsuEnum WILLOW = new ItemJutsu.JutsuEnum(1, "tooltip.shikotsumyaku.dancewillow", 'S', 150, 100d, new WillowDance());
+
+	public static final ItemJutsu.JutsuEnum WILLOWLARCH = new ItemJutsu.JutsuEnum(0, "tooltip.shikotsumyaku.dancewillowlarch", 'S', 250, 300d, new WillowDance());
+	public static final ItemJutsu.JutsuEnum CAMELLIA = new ItemJutsu.JutsuEnum(1, "tooltip.shikotsumyaku.dancecamellia", 'S', 150, 100d, new CamelliaDance());
+	public static final ItemJutsu.JutsuEnum BULLETS = new ItemJutsu.JutsuEnum(2, "finger_bone", 'S', 150, 5d, new EntityFingerBone.EC.Jutsu());
+	public static final ItemJutsu.JutsuEnum CFLOWER = new ItemJutsu.JutsuEnum(3, "tooltip.shikotsumyaku.danceclementisflower", 'S', 400, 500d, new ClementisFlower());
+	public static final ItemJutsu.JutsuEnum BRACKEN = new ItemJutsu.JutsuEnum(4, "entitybrackendance", 'S', 400, 20d, new EntityBrackenDance.Jutsu());
 
 	public ItemShikotsumyaku(ElementsNarutomodMod instance) {
 		super(instance, 659);
@@ -53,7 +56,7 @@ public class ItemShikotsumyaku extends ElementsNarutomodMod.ModElement {
 
 	@Override
 	public void initElements() {
-		elements.items.add(() -> new RangedItem(LARCH, WILLOW, CAMELLIA, BULLETS, CFLOWER, BRACKEN));
+		elements.items.add(() -> new RangedItem(WILLOWLARCH, CAMELLIA, BULLETS, CFLOWER, BRACKEN));
 		elements.entities.add(() -> EntityEntryBuilder.create().entity(EntityBrackenDance.class)
 		 .id(new ResourceLocation("narutomod", "entitybrackendance"), ENTITYID).name("entitybrackendance").tracker(64, 1, true)
 		.build());
@@ -96,12 +99,13 @@ public class ItemShikotsumyaku extends ElementsNarutomodMod.ModElement {
 			 }
 			return 1f;
 		}
-	}
+
+	}
 
 	public static class LarchDance implements ItemJutsu.IJutsuCallback {
 		@Override
 		public boolean createJutsu(ItemStack stack, EntityLivingBase entity, float power) {
-			entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, (SoundEvent) 
+			entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, (SoundEvent)
 				  SoundEvent.REGISTRY.getObject(new ResourceLocation(("narutomod:bonecrack"))),
 				  SoundCategory.PLAYERS, 1f, 1f);
 			ItemStack cheststack = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
@@ -136,16 +140,19 @@ public class ItemShikotsumyaku extends ElementsNarutomodMod.ModElement {
 				if (cheststack.getItem() != ItemBoneArmor.body) {
 					cheststack = new ItemStack(ItemBoneArmor.body);
 					ItemBoneArmor.setWillowActive(cheststack, true);
+					ItemBoneArmor.setLarchActive(cheststack, true);
 					if (entity instanceof EntityPlayer) {
 						ProcedureUtils.swapItemToSlot((EntityPlayer)entity, EntityEquipmentSlot.CHEST, cheststack);
 					} else {
 						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, cheststack);
 					}
 				} else {
+					ItemBoneArmor.setLarchActive(cheststack, true);
 					ItemBoneArmor.setWillowActive(cheststack, true);
 				}
 				return true;
 			} else {
+				ItemBoneArmor.setLarchActive(cheststack, false);
 				ItemBoneArmor.setWillowActive(cheststack, false);
 			}
 			return false;

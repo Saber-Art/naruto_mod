@@ -86,6 +86,9 @@ public class EntitySlug extends ElementsNarutomodMod.ModElement {
 		public EntityCustom(EntityLivingBase summonerIn, float scale) {
 			super(summonerIn);
 			this.setOGSize(0.75f, 0.75f);
+			if (scale > 15) {
+				scale = 15;
+			}
 			this.setScale(scale);
 			this.isImmuneToFire = true;
 			this.enablePersistence();

@@ -59,15 +59,16 @@ import net.narutomod.ElementsNarutomodMod;
 import java.util.Map;
 import com.google.common.collect.Maps;
 import javax.annotation.Nullable;
-
+
+
 @ElementsNarutomodMod.ModElement.Tag
 public class ItemMokuton extends ElementsNarutomodMod.ModElement {
 	@ObjectHolder("narutomod:mokuton")
 	public static final Item block = null;
-	public static final ItemJutsu.JutsuEnum WOODBURIAL = new ItemJutsu.JutsuEnum(0, "wood_burial", 'S', 100d, new EntityWoodBurial.EC.Jutsu());
+	public static final ItemJutsu.JutsuEnum WOODBURIAL = new ItemJutsu.JutsuEnum(0, "wood_burial", 'S', 500d, new EntityWoodBurial.EC.Jutsu());
 	public static final ItemJutsu.JutsuEnum WOODPRISON = new ItemJutsu.JutsuEnum(1, "wood_prison", 'S', 50d, new EntityWoodPrison.EC.Jutsu());
 	public static final ItemJutsu.JutsuEnum WOODHOUSE = new ItemJutsu.JutsuEnum(2, "tooltip.mokuton.rightclick2", 'S', 100d, new JutsuHouse());
-	public static final ItemJutsu.JutsuEnum GOLEM = new ItemJutsu.JutsuEnum(3, "wood_golem", 'S', 800, 1000d, new EntityWoodGolem.EC.Jutsu());
+	public static final ItemJutsu.JutsuEnum GOLEM = new ItemJutsu.JutsuEnum(3, "wood_golem", 'S', 2500, 4000d, new EntityWoodGolem.EC.Jutsu());
 	public static final ItemJutsu.JutsuEnum ARMATTACK = new ItemJutsu.JutsuEnum(4, "wood_arm", 'S', 400, 50d, new EntityWoodArm.EC.Jutsu());
 	
 	public ItemMokuton(ElementsNarutomodMod instance) {

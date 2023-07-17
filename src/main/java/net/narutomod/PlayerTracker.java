@@ -72,7 +72,7 @@ public class PlayerTracker extends ElementsNarutomodMod.ModElement {
 	}
 
 	private static void addBattleXp(EntityPlayer entity, double xp, boolean sendMessage) {
-		entity.getEntityData().setDouble(BATTLEXP, Math.min(getBattleXp(entity) + xp, 100000.0d));
+		entity.getEntityData().setDouble(BATTLEXP, Math.min(getBattleXp(entity) + xp, 200000.0d));
 		if (entity instanceof EntityPlayerMP) {
 			sendBattleXPToTracking((EntityPlayerMP)entity);
 			if (sendMessage) {
@@ -213,7 +213,30 @@ public class PlayerTracker extends ElementsNarutomodMod.ModElement {
 		@SubscribeEvent
 		public void onTick(TickEvent.PlayerTickEvent event) {
 			if (event.phase == TickEvent.Phase.END && event.player instanceof EntityPlayerMP) {
-				double d = getBattleXp(event.player) * 0.005d;
+
+				double d;
+				double battleXp = getBattleXp(event.player);
+				double flat = 100000.0d;
+				double max = flat * 2d;
+
+				if (battleXp < flat) {
+					d = battleXp * 0.005D;
+				} else {
+					d = battleXp * 0.00115D;
+				}
+
+				//if (battleXp > flat) {
+				//	double r = 0.0037d;
+				//	double xpFactor = Math.exp(-r*(battleXp-flat)/flat);
+				//	d = battleXp * r * xpFactor;
+				//	if (d > 750d) {
+				//		d = 750d;
+				//	}
+				//} else {
+				//	d = battleXp * 0.005d;
+				//}
+
+				//double d = getBattleXp(event.player) * 0.005d;
 				if (d > 0d) {
 					IAttributeInstance maxHealthAttr = event.player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
 					AttributeModifier attr = maxHealthAttr.getModifier(hp_uuid);

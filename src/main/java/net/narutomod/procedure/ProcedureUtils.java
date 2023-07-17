@@ -607,23 +607,23 @@ public class ProcedureUtils extends ElementsNarutomodMod.ModElement {
 		float blockHardness = blockstate.getBlockHardness(world, pos);
 		if (!world.isAirBlock(pos) && blockHardness >= 0.0f && blockHardness <= hardnessLimit && RNG.nextFloat() <= breakChance) {
 			if (sound) {
-				SoundType type = blockstate.getBlock().getSoundType();
-				world.playSound(null, pos, type.getBreakSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0f) / 2.0f, type.getPitch() * 0.8f);
+				//SoundType type = blockstate.getBlock().getSoundType();
+				//world.playSound(null, pos, type.getBreakSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0f) / 2.0f, type.getPitch() * 0.8f);
 			}
 			if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(world, null)) {
-				world.setBlockToAir(pos);
-				if (!world.isRemote && Math.random() <= (double) dropChance) {
-					Item item = blockstate.getBlock().getItemDropped(blockstate, RNG, 0);
-					if (item != Items.AIR) {
-						entityToSpawn = new EntityItem(world, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), new ItemStack(item, 1));
-						entityToSpawn.setDefaultPickupDelay();
-						world.spawnEntity(entityToSpawn);
-					}
-				}
+				//world.setBlockToAir(pos);
+				//if (!world.isRemote && Math.random() <= (double) dropChance) {
+				//	Item item = blockstate.getBlock().getItemDropped(blockstate, RNG, 0);
+				//	if (item != Items.AIR) {
+				//		entityToSpawn = new EntityItem(world, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), new ItemStack(item, 1));
+				//		entityToSpawn.setDefaultPickupDelay();
+				//		world.spawnEntity(entityToSpawn);
+				//	}
+				//}
 			}
 			if (world instanceof WorldServer) {
 				((WorldServer)world).spawnParticle(EnumParticleTypes.BLOCK_DUST, 0.5D+pos.getX(), 0.5D+pos.getY(), 0.5D+pos.getZ(),
-				 8, 0.2d, 0.2d, 0.2d, 0.15d, Block.getIdFromBlock(blockstate.getBlock()));
+				 1, 0.2d, 0.2d, 0.2d, 0.15d, Block.getIdFromBlock(blockstate.getBlock()));
 			}
 		}
 		return entityToSpawn;

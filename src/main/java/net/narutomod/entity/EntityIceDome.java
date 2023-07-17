@@ -2,6 +2,7 @@
 package net.narutomod.entity;
 
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
@@ -92,7 +93,7 @@ public class EntityIceDome extends ElementsNarutomodMod.ModElement {
 			super.applyEntityAttributes();
 			this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(100D);
 			this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.0D);
-			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(400D);
+			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1500D);
 		}
 
 		@Override
@@ -108,6 +109,10 @@ public class EntityIceDome extends ElementsNarutomodMod.ModElement {
 				}
 				EntityLivingBase summoner = this.getSummoner();
 				if (summoner != null && summoner.isPotionActive(MobEffects.INVISIBILITY)) {
+					NBTTagCompound data = summoner.getEntityData();
+
+					data.setLong("icedome_cd", System.currentTimeMillis() + 5000);
+
 					summoner.removePotionEffect(MobEffects.INVISIBILITY);
 				}
 			}
@@ -129,6 +134,17 @@ public class EntityIceDome extends ElementsNarutomodMod.ModElement {
 		@Override
 		public void onUpdate() {
 			super.onUpdate();
+
+			if (this.getSummoner() != null) {
+				NBTTagCompound entityData = this.getSummoner().getEntityData();
+
+				if (entityData.hasKey("icedome_cd")) {
+					if (System.currentTimeMillis() < entityData.getLong("icedome_cd")) {
+						this.setDead();
+					}
+				}
+			}
+
 			if (this.world.isRemote && this.ticksExisted % 40 == 1) {
 				ProcedureSync.ResetBoundingBox.sendToServer(this);
 			}
@@ -319,6 +335,14 @@ public class EntityIceDome extends ElementsNarutomodMod.ModElement {
 			@Override
 			public boolean createJutsu(ItemStack stack, EntityLivingBase entity, float power) {
 				if (!entity.isRiding()) {
+
+					NBTTagCompound entityData = entity.getEntityData();
+					if (entityData.hasKey("icedome_cd")) {
+						if (System.currentTimeMillis() < entityData.getLong("icedome_cd")) {
+							return false;
+						}
+					}
+
 					this.createJutsu(entity, entity.posX, entity.posY - 0.1d, entity.posZ);
 					return true;
 				} else if (entity.getRidingEntity() instanceof EC) {

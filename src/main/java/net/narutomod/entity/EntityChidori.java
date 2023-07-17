@@ -60,8 +60,8 @@ import com.google.common.collect.ImmutableMap;
 public class EntityChidori extends ElementsNarutomodMod.ModElement {
 	public static final int ENTITYID = 141;
 	public static final int ENTITYID_RANGED = 142;
-	public static final double CHAKRA_USAGE = 150d;
-	private static final double CHAKRA_BURN = 40d; // per second
+	public static final double CHAKRA_USAGE = 500d;
+	private static final double CHAKRA_BURN = 100d; // per second
 
 	public EntityChidori(ElementsNarutomodMod instance) {
 		super(instance, 396);

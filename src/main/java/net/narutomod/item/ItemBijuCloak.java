@@ -120,7 +120,7 @@ public class ItemBijuCloak extends ElementsNarutomodMod.ModElement {
 
 			@Override
 			public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-				return getTexture(stack);
+				return getTexture(stack, entity);
 			}
 		}.setUnlocalizedName("biju_cloakhelmet").setRegistryName("biju_cloakhelmet").setCreativeTab(null));
 
@@ -226,7 +226,7 @@ public class ItemBijuCloak extends ElementsNarutomodMod.ModElement {
 
 			@Override
 			public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-				return getTexture(stack);
+				return getTexture(stack, entity);
 			}
 		}.setUnlocalizedName("biju_cloakbody").setRegistryName("biju_cloakbody").setCreativeTab(null));
 
@@ -266,24 +266,82 @@ public class ItemBijuCloak extends ElementsNarutomodMod.ModElement {
 
 			@Override
 			public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-				return getTexture(stack);
+				return getTexture(stack, entity);
 			}
 		}.setUnlocalizedName("biju_cloaklegs").setRegistryName("biju_cloaklegs").setCreativeTab(null));
 	}
 
-	private static String getTexture(ItemStack stack) {
+	private static String getTexture(ItemStack stack, Entity entity) {
 		int i = getTails(stack);
 		int j = getCloakLevel(stack);
 		int k = getCloakXp(stack);
-		return i == 1 && j == 1 
-		 	? "narutomod:textures/bijucloak_sand.png"
-			: j == 2
-				? i == 9 && k >= 800
-					? k < 4800 
-						? "narutomod:textures/bijucloak_kurama.png"
-						: "narutomod:textures/bijucloak_kcm2.png"
-		 			: "narutomod:textures/bijucloakl2.png" 
-		 		: "narutomod:textures/bijucloakl1.png";
+
+		boolean newCloaks = false;
+
+		String textureLocation = "narutomod:textures/bijucloakl1.png";
+
+		if (i == 1 && j == 2) {
+			textureLocation = "narutomod:textures/bijucloak_sand.png";
+		} else {
+			if (j == 2) {
+				if (i == 9 && k >= 800) {
+					if (k < 4800) {
+						textureLocation = "narutomod:textures/bijucloak_kurama.png";
+					} else {
+						textureLocation = "narutomod:textures/bijucloak_kcm2.png";
+					}
+				} else if (i == 6 && k >= 800) {
+					if (k >= 4800 && k <= 6000) {
+						textureLocation = "narutomod:textures/bijucloak_blue.png";
+					} else if (k > 6000) {
+						textureLocation = "narutomod:textures/bijucloak_saiken.png";
+					} else {
+						textureLocation = "narutomod:textures/bijucloakl2.png";
+					}
+				} else if (i == 2 && k >= 800) {
+					if (k > 6000) {
+						textureLocation = "narutomod:textures/bijucloak_matatabi.png";
+					} else {
+						textureLocation = "narutomod:textures/bijucloakl2.png";
+					}
+				} else if (i == 4 && k >= 800) {
+					if (k > 6000) {
+						textureLocation = "narutomod:textures/bijucloak_songoku.png";
+					} else {
+						textureLocation = "narutomod:textures/bijucloakl2.png";
+					}
+				} else {
+					textureLocation = "narutomod:textures/bijucloakl2.png";
+				}
+
+				if (!newCloaks && i != 9) {
+					textureLocation = "narutomod:textures/bijucloakl2.png";
+				}
+
+				if (entity != null) {
+					UUID saberID = new UUID(1178338569170338581L, -5976603091052023689L);
+					UUID specterID = new UUID(-3491889850053932236L, -7447997994098378364L);
+					UUID tigerID = new UUID(-437778618308673080L, -5976792751018186255L);
+					if (entity.getUniqueID().equals(saberID)) {
+						textureLocation = "narutomod:textures/bijucloak_matatabi.png";
+					} else if (entity.getUniqueID().equals(specterID)) {
+						textureLocation = "narutomod:textures/cloaks/bijucloak_specter.png";
+					} else if (entity.getUniqueID().equals(tigerID)) {
+						textureLocation = "narutomod:textures/bijucloak_songoku.png";
+					}
+				}
+			}
+		}
+		return textureLocation;
+		//return i == 1 && j == 1
+		// 	? "narutomod:textures/bijucloak_sand.png"
+		//	: j == 2
+		//		? i == 9 && k >= 800
+		//			? k < 4800
+		//				? "narutomod:textures/bijucloak_kurama.png"
+		//				: "narutomod:textures/bijucloak_kcm2.png"
+		// 			: "narutomod:textures/bijucloakl2.png"
+		// 		: "narutomod:textures/bijucloakl1.png";
 	}
 
 	public static void clearCloakItems(EntityPlayer player) {

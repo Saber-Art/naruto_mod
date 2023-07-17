@@ -206,7 +206,7 @@ public class ItemShakuton extends ElementsNarutomodMod.ModElement {
 
 		public void setNextPosition(Vec3d vec) {
 			if (this.getDistance(vec.x, vec.y, vec.z) > 0.5d && this.targetTime >= 0) {
-				this.setVelocity(vec.subtract(this.getPositionVector()).normalize().scale(0.6d));
+				this.setVelocity(vec.subtract(this.getPositionVector()).normalize().scale(1.8d));
 			} else {
 				this.setVelocity(vec.subtract(this.getPositionVector()));
 				if (vec.equals(this.getIdlePosition()) && this.targetTime >= 0) {

@@ -37,7 +37,8 @@ import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.EnumHand;
+
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.nbt.NBTTagCompound;
@@ -148,7 +149,7 @@ public class ItemBakuton extends ElementsNarutomodMod.ModElement {
 			super.onUpdate(itemstack, world, entity, par4, par5);
 			if (entity.ticksExisted % 10 == 2 && entity instanceof EntityLivingBase && JIRAIKEN.jutsu.isActivated(itemstack)) {
 				((EntityLivingBase)entity).addPotionEffect(new PotionEffect(
-				 PotionChakraEnhancedStrength.potion, 12, (int)(((Jiraiken)JIRAIKEN.jutsu).getPower(itemstack) * 19), false, false));
+				 PotionChakraEnhancedStrength.potion, 12, (int)(((Jiraiken)JIRAIKEN.jutsu).getPower(itemstack) * 9), false, false));
 			}
 		}
 
@@ -160,6 +161,14 @@ public class ItemBakuton extends ElementsNarutomodMod.ModElement {
 			if (target instanceof EntityLivingBase) {
 				attacker.setRevengeTarget((EntityLivingBase)target);
 			}
+			//if (JIRAIKEN.jutsu.isActivated(itemstack)) {
+			//	if (itemstack.hasTagCompound()) {
+			//		NBTTagCompound tag = itemstack.getTagCompound();
+			//		if (tag.hasKey("isJiraikenActivated")) {
+			//			itemstack.getTagCompound().setBoolean("isJiraikenActivated", false);
+			//		}
+			//	}
+			//}
 			return super.onLeftClickEntity(itemstack, attacker, target);
 		}
 

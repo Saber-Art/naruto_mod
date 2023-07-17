@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.Render;
 
 import net.narutomod.potion.PotionHeaviness;
+import net.narutomod.potion.PotionParalysis;
 import net.narutomod.procedure.ProcedureUtils;
 import net.narutomod.item.ItemJutsu;
 import net.narutomod.ElementsNarutomodMod;
@@ -100,6 +101,7 @@ public class EntityWoodPrison extends ElementsNarutomodMod.ModElement {
 				 this.posX + this.radius, this.posY + this.tHeight, this.posZ + this.radius))) {
 				 	entity.addPotionEffect(new PotionEffect(PotionHeaviness.potion, 100, 3, false, false));
 					entity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 1200, 2, false, false));
+					entity.addPotionEffect(new PotionEffect(PotionParalysis.potion, 1200, 2, false, false));
 				}
 				Map<BlockPos, IBlockState> map = Maps.newHashMap();
 				for (BlockPos pos : Iterables.concat(BlockPos.getAllInBoxMutable(this.blockpos.add(-this.radius, -3, -this.radius), this.blockpos.add(-this.radius, this.tHeight, this.radius)),
@@ -148,5 +150,6 @@ public class EntityWoodPrison extends ElementsNarutomodMod.ModElement {
 				return false;
 			}
 		}
-	}
+
+	}
 }

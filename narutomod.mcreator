@@ -7153,6 +7153,15 @@
         "1": 427
       },
       "registry_name": "adamantine_prison"
+    },
+    {
+      "name": "Speedy",
+      "type": "item",
+      "sortid": 853,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "speedy"
     }
   ],
   "variable_elements": [
@@ -8138,6 +8147,7 @@
       "tooltip.kekkeimora.expansivetsb": "Expansive Truth Seeking Ball",
       "item.gunbai.name": "Gunbai",
       "entity.tailed_beast.name": "Tailed Beast",
+      "entity.ice_walk_toggle.name": "Toggle Water Freezing",
       "item.scroll_rasenshuriken.name": "Wind Release - Rasenshuriken",
       "entity.itachi.name": "Itachi Uchiha",
       "item.scroll_lightning_panther.name": "Lightning Release: Black Panther",
@@ -8493,6 +8503,7 @@
       "entity.entitybrackendance.name": "Bracken Dance",
       "advancements.eternalmangekyoachieved.title": "Eternal Mangekyo Awakened",
       "advancements.sharinganopened.descr": "Practice and practice and practice your ninja skills.",
+      "tooltip.shikotsumyaku.dancewillowlarch": "Willow and Larch Dance",
       "entity.anbu.name": "Anbu",
       "subtitles.ice_shoot": "",
       "chattext.rinnegan.path0": "Deva Path",
@@ -8597,6 +8608,7 @@
       "subtitles.mokujin_no_jutsu": "",
       "item.anbu_robehelmet.name": "Anbu Robe Helmet",
       "splash_potion.effect.corrosion": "Splash Corrosion",
+      "item.speedy.name": "Speedy",
       "entity.melting_jutsu.name": "Lava Melting Jutsu",
       "item.ice_senbon.name": "Ice Senbon",
       "tooltip.mangekyo.kamui.jutsu1": "Intangibility,  [SHIFT] Teleport",
@@ -8823,7 +8835,7 @@
   "workspaceSettings": {
     "modid": "narutomod",
     "modName": "NarutoMod",
-    "version": "0.3.0-beta",
+    "version": "0.3.0-beta-so",
     "author": "AHZNB",
     "websiteURL": "https://www.youtube.com/c/AHZNB",
     "license": "GNU General Public License version 3 (GPLv3)",

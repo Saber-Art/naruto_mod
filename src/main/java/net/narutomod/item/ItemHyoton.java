@@ -7,7 +7,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -41,10 +42,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentFrostWalker;
 import net.minecraft.nbt.NBTTagCompound;
 
-import net.narutomod.entity.EntitySpike;
-import net.narutomod.entity.EntityIceSpear;
-import net.narutomod.entity.EntityIceDome;
-import net.narutomod.entity.EntityIcePrison;
+import net.narutomod.entity.*;
 import net.narutomod.procedure.ProcedureUtils;
 import net.narutomod.creativetab.TabModTab;
 import net.narutomod.EntityTracker;
@@ -57,10 +55,13 @@ public class ItemHyoton extends ElementsNarutomodMod.ModElement {
 	@GameRegistry.ObjectHolder("narutomod:hyoton")
 	public static final Item block = null;
 	public static final int ENTITYID = 219;
-	public static final ItemJutsu.JutsuEnum KILLSPIKES = new ItemJutsu.JutsuEnum(0, "ice_spike", 'S', 150, 20d, new EntityIceSpike.Jutsu());
-	public static final ItemJutsu.JutsuEnum ICESPEARS = new ItemJutsu.JutsuEnum(1, "ice_spear", 'S', 150, 20d, new EntityIceSpear.EC.Jutsu());
-	public static final ItemJutsu.JutsuEnum ICEDOME = new ItemJutsu.JutsuEnum(2, "ice_dome", 'S', 200, 100d, new EntityIceDome.EC.Jutsu());
-	public static final ItemJutsu.JutsuEnum ICEPRISON = new ItemJutsu.JutsuEnum(3, "ice_prison", 'S', 150, 50d, new EntityIcePrison.EC.Jutsu());
+
+	public static final ItemJutsu.JutsuEnum ICETOGGLE = new ItemJutsu.JutsuEnum(0, "ice_walk_toggle", 'S', 1, 50d, new IceToggleJutsu());
+	public static final ItemJutsu.JutsuEnum KILLSPIKES = new ItemJutsu.JutsuEnum(1, "ice_spike", 'S', 150, 20d, new EntityIceSpike.Jutsu());
+	public static final ItemJutsu.JutsuEnum ICESPEARS = new ItemJutsu.JutsuEnum(2, "ice_spear", 'S', 150, 20d, new EntityIceSpear.EC.Jutsu());
+	public static final ItemJutsu.JutsuEnum ICEDOME = new ItemJutsu.JutsuEnum(3, "ice_dome", 'S', 200, 500d, new EntityIceDome.EC.Jutsu());
+	public static final ItemJutsu.JutsuEnum ICEPRISON = new ItemJutsu.JutsuEnum(4, "ice_prison", 'S', 150, 50d, new EntityIcePrison.EC.Jutsu());
+
 
 	public ItemHyoton(ElementsNarutomodMod instance) {
 		super(instance, 531);
@@ -68,7 +69,7 @@ public class ItemHyoton extends ElementsNarutomodMod.ModElement {
 
 	@Override
 	public void initElements() {
-		elements.items.add(() -> new RangedItem(KILLSPIKES, ICESPEARS, ICEDOME, ICEPRISON));
+		elements.items.add(() -> new RangedItem(ICETOGGLE, KILLSPIKES, ICESPEARS, ICEDOME, ICEPRISON));
 		elements.entities.add(() -> EntityEntryBuilder.create().entity(EntityIceSpike.class)
 		 .id(new ResourceLocation("narutomod", "ice_spike"), ENTITYID).name("ice_spike").tracker(64, 1, true).build());
 	}
@@ -96,6 +97,7 @@ public class ItemHyoton extends ElementsNarutomodMod.ModElement {
 			setUnlocalizedName("hyoton");
 			setRegistryName("hyoton");
 			setCreativeTab(TabModTab.tab);
+			this.defaultCooldownMap[ICETOGGLE.index] = 0;
 			this.defaultCooldownMap[KILLSPIKES.index] = 0;
 			this.defaultCooldownMap[ICESPEARS.index] = 0;
 			this.defaultCooldownMap[ICEDOME.index] = 0;
@@ -153,7 +155,20 @@ public class ItemHyoton extends ElementsNarutomodMod.ModElement {
 				//	edh.prevBlockPos = pos;
 				if (!pos.equals(this.getLastTickPos(entity))) {
 					this.setlastTickPos(entity, pos);
-					EnchantmentFrostWalker.freezeNearby(living, world, pos, 1);
+
+					NBTTagCompound tag = itemstack.getTagCompound();
+
+					//tag.setBoolean("IceWalkToggle"
+
+					if (tag.hasKey("IceWalkToggle")) {
+						if (tag.getBoolean("IceWalkToggle")) {
+							EnchantmentFrostWalker.freezeNearby(living, world, pos, 1);
+						}
+					} else {
+						EnchantmentFrostWalker.freezeNearby(living, world, pos, 1);
+					}
+
+					//EnchantmentFrostWalker.freezeNearby(living, world, pos, 1);
 				}
 				if (living.ticksExisted % 20 == 3) {
 					living.addPotionEffect(new PotionEffect(MobEffects.SPEED, 22, 3, false, false));
@@ -167,6 +182,23 @@ public class ItemHyoton extends ElementsNarutomodMod.ModElement {
 		@Override
 		public void addInformation(ItemStack itemstack, World world, List<String> list, ITooltipFlag flag) {
 			super.addInformation(itemstack, world, list, flag);
+
+			boolean canWalk = false;
+			if (itemstack.hasTagCompound()) {
+				NBTTagCompound tag = itemstack.getTagCompound();
+				if (tag.hasKey("IceWalkToggle")) {
+					if (tag.getBoolean("IceWalkToggle")) {
+						canWalk = true;
+					}
+				}
+			} else {
+				itemstack.setTagCompound(new NBTTagCompound());
+				if (!itemstack.getTagCompound().hasKey("IceWalkToggle")) {
+					itemstack.getTagCompound().setBoolean("IceWalkToggle", false);
+				}
+			}
+
+			list.add(TextFormatting.AQUA+"Freeze Water: "+TextFormatting.GRAY+canWalk);
 			list.add(TextFormatting.GREEN + net.minecraft.util.text.translation.I18n.translateToLocal("tooltip.hyoton.musthave") + TextFormatting.RESET);
 		}
 
@@ -180,6 +212,22 @@ public class ItemHyoton extends ElementsNarutomodMod.ModElement {
 					event.setCanceled(true);
 				}
 			}
+		}
+	}
+
+	public static class IceToggleJutsu implements ItemJutsu.IJutsuCallback {
+		@Override
+		public boolean createJutsu(ItemStack stack, EntityLivingBase entity, float power) {
+
+			NBTTagCompound tag = stack.getTagCompound();
+
+			if (!tag.hasKey("IceWalkToggle")) {
+				tag.setBoolean("IceWalkToggle", false);
+			}
+
+			tag.setBoolean("IceWalkToggle", !tag.getBoolean("IceWalkToggle"));
+
+			return true;
 		}
 	}
 

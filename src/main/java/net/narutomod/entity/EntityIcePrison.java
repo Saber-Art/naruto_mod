@@ -22,6 +22,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.block.state.IBlockState;
 
+import net.narutomod.potion.PotionParalysis;
 import net.narutomod.procedure.ProcedureUtils;
 import net.narutomod.item.ItemJutsu;
 import net.narutomod.ElementsNarutomodMod;
@@ -113,7 +114,8 @@ public class EntityIcePrison extends ElementsNarutomodMod.ModElement {
 				}
 				int i = this.ticksExisted % 4;
 				if (i == 0) {
-					this.target.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 600, 1));
+					this.target.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 600, 9));
+					this.target.addPotionEffect(new PotionEffect(PotionParalysis.potion, 600, 1));
 					this.tz++;
 					if (this.tz > (int) Math.round(this.tr / 1.41421356D)) {
 						this.tz = 0;
@@ -160,5 +162,6 @@ public class EntityIcePrison extends ElementsNarutomodMod.ModElement {
 				return false;
 			}
 		}
-	}
+
+	}
 }

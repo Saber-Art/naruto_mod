@@ -46,11 +46,11 @@ public class ItemRaiton extends ElementsNarutomodMod.ModElement {
 	public static final int ENTITYID = 129;
 	public static final int ENTITY2ID = 10129;
 	public static final ItemJutsu.JutsuEnum CHIDORI = new ItemJutsu.JutsuEnum(0, "chidori", 'A', EntityChidori.CHAKRA_USAGE, new EntityChidori.EC.Jutsu());
-	public static final ItemJutsu.JutsuEnum CHAKRAMODE = new ItemJutsu.JutsuEnum(1, "raitonchakramode", 'B', 10d, new EntityChakraMode.Jutsu());
-	public static final ItemJutsu.JutsuEnum CHASINGDOG = new ItemJutsu.JutsuEnum(2, "lightning_beast", 'C', 20d, new EntityLightningBeast.EC.Jutsu());
-	public static final ItemJutsu.JutsuEnum GIAN = new ItemJutsu.JutsuEnum(3, "false_darkness", 'B', 100d, new EntityFalseDarkness.EC.Jutsu());
-	public static final ItemJutsu.JutsuEnum KIRIN = new ItemJutsu.JutsuEnum(4, "kirin", 'S', 1500d, new EntityKirin.EC.Jutsu());
-	public static final ItemJutsu.JutsuEnum BLACKPANTHER = new ItemJutsu.JutsuEnum(5, "lightning_panther", 'S', 50d, new EntityLightningPanther.EC.Jutsu());
+	//public static final ItemJutsu.JutsuEnum CHAKRAMODE = new ItemJutsu.JutsuEnum(1, "raitonchakramode", 'B', 10d, new EntityChakraMode.Jutsu());
+	public static final ItemJutsu.JutsuEnum CHASINGDOG = new ItemJutsu.JutsuEnum(1, "lightning_beast", 'C', 20d, new EntityLightningBeast.EC.Jutsu());
+	public static final ItemJutsu.JutsuEnum GIAN = new ItemJutsu.JutsuEnum(2, "false_darkness", 'B', 100d, new EntityFalseDarkness.EC.Jutsu());
+	public static final ItemJutsu.JutsuEnum KIRIN = new ItemJutsu.JutsuEnum(3, "kirin", 'S', 1500d, new EntityKirin.EC.Jutsu());
+	public static final ItemJutsu.JutsuEnum BLACKPANTHER = new ItemJutsu.JutsuEnum(4, "lightning_panther", 'S', 50d, new EntityLightningPanther.EC.Jutsu());
 
 	public ItemRaiton(ElementsNarutomodMod instance) {
 		super(instance, 373);
@@ -58,7 +58,7 @@ public class ItemRaiton extends ElementsNarutomodMod.ModElement {
 
 	@Override
 	public void initElements() {
-		elements.items.add(() -> new RangedItem(CHIDORI, CHAKRAMODE, CHASINGDOG, GIAN, KIRIN, BLACKPANTHER));
+		elements.items.add(() -> new RangedItem(CHIDORI, CHASINGDOG, GIAN, KIRIN, BLACKPANTHER));
 		elements.entities.add(() -> EntityEntryBuilder.create().entity(EntityChakraMode.class)
 			.id(new ResourceLocation("narutomod", "raitonchakramode"), ENTITYID).name("raitonchakramode").tracker(64, 1, true).build());
 	}
@@ -133,7 +133,7 @@ public class ItemRaiton extends ElementsNarutomodMod.ModElement {
 	}
 
 	public static class EntityChakraMode extends Entity {
-		private final double CHAKRA_BURN = CHAKRAMODE.chakraUsage; // per second
+		private final double CHAKRA_BURN = ItemSpeedy.CHAKRAMODE.chakraUsage; // per second
 		//private int maxCooldown = 400;
 		private EntityLivingBase summoner;
 		private ItemStack usingItemstack;
@@ -234,7 +234,7 @@ public class ItemRaiton extends ElementsNarutomodMod.ModElement {
 				 : this.usingItemstack;
 				if (stack != null) {
 					ItemJutsu.Base item = (ItemJutsu.Base)stack.getItem();
-					item.setJutsuCooldown(stack, CHAKRAMODE, (long)((float)this.ticksExisted * item.getModifier(stack, this.summoner)) + 40);
+					item.setJutsuCooldown(stack, ItemSpeedy.CHAKRAMODE, (long)((float)this.ticksExisted * item.getModifier(stack, this.summoner)) + 40);
 				}
 			}
 		}

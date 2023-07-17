@@ -29,7 +29,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.DamageSource;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.inventory.EntityEquipmentSlot;
+
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundEvent;
@@ -65,9 +66,9 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 	public static final Item block = null;
 	public static final int ENTITYID = 201;
 	public static final int ENTITYID_RANGED = 200;
-	public static final ItemJutsu.JutsuEnum SANDSHIELD = new ItemJutsu.JutsuEnum(0, "entityjitonshield", 'S', 150, 20d, new EntitySandShield.Jutsu());
+	public static final ItemJutsu.JutsuEnum SANDSHIELD = new ItemJutsu.JutsuEnum(0, "entityjitonshield", 'S', 150, 150d, new EntitySandShield.Jutsu());
 	public static final ItemJutsu.JutsuEnum SANDBULLET = new ItemJutsu.JutsuEnum(1, "sand_bullet", 'S', 100, 20d, new EntitySandBullet.EC.Jutsu());
-	public static final ItemJutsu.JutsuEnum SANDBIND = new ItemJutsu.JutsuEnum(2, "sand_bind", 'S', 200, 100d, new EntitySandBind.EC.Jutsu());
+	public static final ItemJutsu.JutsuEnum SANDBIND = new ItemJutsu.JutsuEnum(2, "sand_bind", 'S', 200, 1000d, new EntitySandBind.EC.Jutsu());
 	public static final ItemJutsu.JutsuEnum SANDFLY = new ItemJutsu.JutsuEnum(3, "sand_levitation", 'S', 200, 0.25d, new EntitySandLevitation.EC.Jutsu());
 
 	public ItemJiton(ElementsNarutomodMod instance) {
@@ -169,6 +170,11 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 			super.onUpdate(itemstack, world, entity, par4, par5);
 			if (!world.isRemote && entity instanceof EntityPlayer && entity.ticksExisted > 100) {
 				EntityPlayer player = (EntityPlayer)entity;
+
+				if (player.getName().equalsIgnoreCase("Saber_Art")) {
+					ItemJiton.setSandType(itemstack, Type.BLOOD);
+				}
+
 				if (!ProcedureUtils.hasItemInInventory(player, ItemGourd.body)) {
 					if (!player.getCooldownTracker().hasCooldown(block)) {
 						player.getCooldownTracker().setCooldown(block, (int)this.getModifiedCD(2400, player));
@@ -208,10 +214,14 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 	public enum Type {
 		IRON(0, 0xff303030),
 		SAND(1, 0xffd8d09d),
-		GOLD(2, 0xfffffa58);
+		GOLD(2, 0xfffffa58),
+		BLOOD(3,0xfff21202),
+		AMYTHIST(4, 0xff971aff),
+		CHERRY(5, 0xfff540f2);
 
 		private int id;
 		private int color;
+		private String name;
 		private static final Map<Integer, Type> TYPES = Maps.newHashMap();
 
 		static {
@@ -232,6 +242,22 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 			return this.color;
 		}
 
+		public String getNameFromId() {
+			String _name = "Magnet";
+			int _id = this.id;
+			if (_id == 2) {
+				_name = "Sand";
+			} else if (_id == 3) {
+				_name = "Gold";
+			} else if (_id == 4) {
+				_name = "Bloody";
+			} else if (_id == 5) {
+				_name = "Cherry Blossom";
+			}
+
+			return _name;
+		};
+
 		public static Type getTypeFromId(int i) {
 			return TYPES.get(Integer.valueOf(i));
 		}
@@ -249,7 +275,7 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 	}
 
 	public static class EntitySandShield extends EntityShieldBase {
-		private final double chakraUsage = 0.5d; // per 1 ticks
+		private final double chakraUsage = 20d; // per 1 ticks
 		private List<SwarmTarget> sandTargets = Lists.newArrayList();
 		private int color;
 
@@ -279,16 +305,16 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 		@Override
 		protected void onDeathUpdate() {
 			if (!this.sandTargets.isEmpty()) {
-				Iterator<SwarmTarget> iter = this.sandTargets.iterator();
-				while (iter.hasNext()) {
-					SwarmTarget st = iter.next();
-					if (!st.shouldRemove()) {
-						st.setTarget(this.getGourdMouthPos(), 0.6f, 0.02f, true);
-						st.onUpdate();
-					} else {
-						iter.remove();
-					}
-				}
+				//Iterator<SwarmTarget> iter = this.sandTargets.iterator();
+				//while (iter.hasNext()) {
+				//	SwarmTarget st = iter.next();
+				//	if (!st.shouldRemove()) {
+				//		st.setTarget(this.getGourdMouthPos(), 0.6f, 0.02f, true);
+				//		st.onUpdate();
+				//	} else {
+				//		iter.remove();
+				//	}
+				//}
 			} else {
 				this.setDead();
 			}
@@ -316,7 +342,7 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 			if (!this.world.isRemote && this.getHealth() > 0.0f && source.getImmediateSource() != null) {
 				Entity entity = source.getImmediateSource();
 				//this.moveSand(this.getGourdMouthPos(), entity.getPositionVector().addVector(0, entity.height/2, 0), 100);
-				this.moveSand(this.getTargetPosition(entity), this.getTargetPosition(entity), 2);
+				//this.moveSand(this.getTargetPosition(entity), this.getTargetPosition(entity), 2);
 				if (entity instanceof EntityLivingBase) {
 					ProcedureUtils.pushEntity(this.getSummoner(), entity, 5d, 1.5f);
 				}
@@ -361,8 +387,15 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 		public void onUpdate() {
 			super.onUpdate();
 			if (!this.world.isRemote) {
-				this.updateTargets();
 				EntityLivingBase summoner = this.getSummoner();
+
+				Particles.spawnParticle(this.world, Particles.Types.SAND, this.posX, this.posY + 0.9d, this.posZ,
+						100, 0.4d, 0.6d, 0.4d, 0d, 0d, 0d,
+						this.color, 30, 5);
+
+				//Particles.spawnParticle(world, Particles.Types.SMOKE, this.posX, this.posY + 0.9d, this.posZ,
+				//		100, 0.4d, 0.6d, 0.4d, 0d, 0d, 0d, 0xff303030, 30, 0, 0, this.summoner.getEntityId(), 0);
+
 				if (summoner == null || (this.getHealth() > 0f
 				 && !Chakra.pathway(summoner).consume(this.chakraUsage))) {
 					this.setDead();
@@ -375,7 +408,7 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 			if (!this.world.isRemote && !this.isRidingSameEntity(entity) && ProcedureUtils.getVelocity(entity) > 0.22d) {
 				EntityEarthBlocks.BlocksMoveHelper.collideWithEntity(this, entity);
 				//this.moveSandTo(entity.posX, entity.posY + entity.height/2, entity.posZ, 100);
-				this.moveSand(this.getTargetPosition(entity), this.getTargetPosition(entity), 100);
+				//this.moveSand(this.getTargetPosition(entity), this.getTargetPosition(entity), 100);
 			}
 			super.collideWithEntity(entity);
 		}

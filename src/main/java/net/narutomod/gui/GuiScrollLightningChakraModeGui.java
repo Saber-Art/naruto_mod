@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import net.narutomod.item.ItemRaiton;
+import net.narutomod.item.ItemSpeedy;
 import net.narutomod.procedure.ProcedureUtils;
 import net.narutomod.PlayerTracker;
 import net.narutomod.ElementsNarutomodMod;
@@ -31,7 +32,7 @@ public class GuiScrollLightningChakraModeGui extends ElementsNarutomodMod.ModEle
 			// security measure to prevent arbitrary chunk generation
 			if (player.world.isRemote || !player.world.isBlockLoaded(new BlockPos(this.x, this.y, this.z)))
 				return;
-			ItemStack stack = GuiNinjaScroll.enableJutsu(player, (ItemRaiton.RangedItem)ItemRaiton.block, ItemRaiton.CHAKRAMODE, true);
+			ItemStack stack = GuiNinjaScroll.enableJutsu(player, (ItemRaiton.RangedItem)ItemRaiton.block, ItemSpeedy.CHAKRAMODE, true);
 			if (stack != null) {
 				super.handleButtonAction(player, buttonID);
 			}
@@ -58,7 +59,7 @@ public class GuiScrollLightningChakraModeGui extends ElementsNarutomodMod.ModEle
 
 		@Override
 		protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-			this.fontRenderer.drawString(ItemRaiton.CHAKRAMODE.getName(), 38, 13, -16777216);
+			this.fontRenderer.drawString(ItemSpeedy.CHAKRAMODE.getName(), 38, 13, -16777216);
 		}
 	}
 }

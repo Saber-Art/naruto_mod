@@ -107,7 +107,8 @@ public class EntityHakkeshoKeiten extends ElementsNarutomodMod.ModElement {
 		@Override
 		public boolean attackEntityFrom(DamageSource source, float amount) {
 			Entity attacker = source.getTrueSource();
-			if (attacker instanceof EntityLivingBase && !attacker.equals(this.getSummoner()) && !this.equals(attacker)) {
+			if (attacker instanceof EntityLivingBase && !attacker.equals(this.getSummoner()) && !this.equals(attacker))
+ {
 				attacker.attackEntityFrom(source, amount);
 			}
 			return super.attackEntityFrom(source, amount);
@@ -132,16 +133,16 @@ public class EntityHakkeshoKeiten extends ElementsNarutomodMod.ModElement {
 					float scale = maturity * this.maxScale;
 					this.setScale(scale);
 					Particles.Renderer particles = new Particles.Renderer(this.world);
-					for (int i = 0; i < (int)(scale * maturity * 30f); i++) {
+					for (int i = 0; i < (int)(scale * maturity * 2f); i++) {
 						particles.spawnParticles(Particles.Types.SMOKE, summoner.posX, summoner.posY, summoner.posZ,
 						 1, 1d, 0d, 1d, (this.rand.nextDouble()-0.5d) * scale * 2.0d, 0.4d,
 						 (this.rand.nextDouble()-0.5d) * scale * 2.0d, 0x10FFFFFF, 30 + (int)(scale * 5), 0);
 					}
 					particles.send();
 					if (maturity >= 0.9f) {
-						this.breakBlocks(ProcedureUtils.getNonAirBlocks(this.world, 
-						 this.getEntityBoundingBox().expand(1.0D, 1.0D, 1.0D).expand(-1.0D, 0.0D, -1.0D)));
-						ProcedureUtils.purgeHarmfulEffects(summoner);
+						//this.breakBlocks(ProcedureUtils.getNonAirBlocks(this.world,
+						// this.getEntityBoundingBox().expand(1.0D, 1.0D, 1.0D).expand(-1.0D, 0.0D, -1.0D)));
+						//ProcedureUtils.purgeHarmfulEffects(summoner);
 					}
 				}
 			}

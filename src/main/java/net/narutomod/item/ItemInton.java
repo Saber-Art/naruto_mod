@@ -36,7 +36,7 @@ public class ItemInton extends ElementsNarutomodMod.ModElement {
 	public static final int ENTITYID = 172;
 	public static final ItemJutsu.JutsuEnum GENJUTSU = new ItemJutsu.JutsuEnum(0, "genjutsu", 'B', 300d, new Genjutsu());
 	public static final ItemJutsu.JutsuEnum MBTRANSFER = new ItemJutsu.JutsuEnum(1, "mind_transfer", 'C', 300d, new EntityMindTransfer.EC.Jutsu());
-	public static final ItemJutsu.JutsuEnum SHADOW_IMITATION = new ItemJutsu.JutsuEnum(2, "shadow_imitation", 'B', 50d, new EntityShadowImitation.EC.Jutsu());
+	public static final ItemJutsu.JutsuEnum SHADOW_IMITATION = new ItemJutsu.JutsuEnum(2, "shadow_imitation", 'B', 3000d, new EntityShadowImitation.EC.Jutsu());
 
 	public ItemInton(ElementsNarutomodMod instance) {
 		super(instance, 441);
@@ -61,7 +61,8 @@ public class ItemInton extends ElementsNarutomodMod.ModElement {
 			this.setCreativeTab(TabModTab.tab);
 		}
 
-		@Override
+
+		@Override
 		protected float getPower(ItemStack stack, EntityLivingBase entity, int timeLeft) {
 			return 1f;
 		}
