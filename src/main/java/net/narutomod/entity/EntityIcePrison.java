@@ -106,7 +106,7 @@ public class EntityIcePrison extends ElementsNarutomodMod.ModElement {
 				Map<BlockPos, IBlockState> map = Maps.newHashMap();
 				for (BlockPos pos : this.tpos) {
 					if (pos != null && this.world.isAirBlock(pos)) {
-						map.put(pos, Blocks.ICE.getDefaultState());
+						map.put(pos, Blocks.PACKED_ICE.getDefaultState());
 					}
 				}
 				if (!map.isEmpty()) {

@@ -219,11 +219,7 @@ public class PlayerTracker extends ElementsNarutomodMod.ModElement {
 				double flat = 100000.0d;
 				double max = flat * 2d;
 
-				if (battleXp < flat) {
-					d = battleXp * 0.005D;
-				} else {
-					d = battleXp * 0.00115D;
-				}
+				d = battleXp * 0.00375d;
 
 				//if (battleXp > flat) {
 				//	double r = 0.0037d;

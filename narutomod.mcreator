@@ -1,8 +1,8 @@
 {
   "id_map": {
-    "GUI": 64,
     "ENTITY": 427,
-    "DIMENSION": 13
+    "DIMENSION": 13,
+    "GUI": 64
   },
   "mod_elements": [
     {
@@ -8143,10 +8143,10 @@
       "item.shuriken.name": "Shuriken",
       "entity.cellular_activation.name": "Cellular Activation",
       "entity.entityasakujaku.name": "Asakujaku (Morning Peacock)",
-      "item.scroll_water_dragon.name": "Water Release - Water Dragon Bullet",
       "tooltip.kekkeimora.expansivetsb": "Expansive Truth Seeking Ball",
-      "item.gunbai.name": "Gunbai",
+      "item.scroll_water_dragon.name": "Water Release - Water Dragon Bullet",
       "entity.tailed_beast.name": "Tailed Beast",
+      "item.gunbai.name": "Gunbai",
       "entity.ice_walk_toggle.name": "Toggle Water Freezing",
       "item.scroll_rasenshuriken.name": "Wind Release - Rasenshuriken",
       "entity.itachi.name": "Itachi Uchiha",
@@ -8546,6 +8546,7 @@
       "potion.effect.paralysis": "Paralysis",
       "item.shakuton.name": "Scorch Release",
       "entity.firestream.name": "Firestream",
+      "chattext.jutsu.enabled": "%s is now enabled!",
       "item.folding_fan.name": "Giant Folding Fan",
       "splash_potion.effect.feather_falling": "Splash Feather Falling",
       "tooltip.yooton.musthave": "Must have Earth \u0026 Fire release",
@@ -8767,6 +8768,7 @@
       "item.ninja_armor_otobody.name": "Ninja Outfit (Otogakure)",
       "item.scroll_shadow_imitation.name": "Shadow Imitation Scroll",
       "item.scroll_transformation.name": "Transformation Jutsu",
+      "tooltip.gauntlet.shoot": "Right click to shoot",
       "entity.particle.name": "Particle",
       "tooltip.shakuton.musthave": "Must have Fire \u0026 Wind release",
       "item.kunai_explosive.name": "Kunai Explosive",

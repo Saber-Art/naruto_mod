@@ -258,7 +258,7 @@ public class ItemJinton extends ElementsNarutomodMod.ModElement {
 	}
 
 	public static class EntityCube extends EntityScalableProjectile.Base {
-		private final int wait = 60;
+		private final int wait = 30;
 		private final int growTime = 30;
 		private final int idleTime = 40;
 		private final int shrinkTime = 10;
