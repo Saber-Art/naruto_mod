@@ -85,7 +85,8 @@ public class ItemScytheHidan extends ElementsNarutomodMod.ModElement {
 	public void registerModels(ModelRegistryEvent event) {
 		ModelLoader.setCustomModelResourceLocation(block, 0, new ModelResourceLocation("narutomod:scythe_hidan", "inventory"));
 	}
-
+
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
@@ -94,7 +95,8 @@ public class ItemScytheHidan extends ElementsNarutomodMod.ModElement {
 		});
 	}
 
-	public static class RangedItem extends Item implements ItemOnBody.Interface {
+
+	public static class RangedItem extends Item implements ItemOnBody.Interface {
 		public RangedItem() {
 			super();
 			this.setMaxDamage(500);
@@ -134,7 +136,8 @@ public class ItemScytheHidan extends ElementsNarutomodMod.ModElement {
 				//entityarrow.setSilent(true);
 				entityarrow.setDamage(12d);
 				//entityarrow.setKnockbackStrength(0);
-				world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_ARROW_SHOOT,
+				world.playSound(null, entity.posX, entity.posY, entity.posZ,
+ SoundEvents.ENTITY_ARROW_SHOOT,
 						SoundCategory.NEUTRAL, 1, 1f / (itemRand.nextFloat() * 0.5f + 1f) + f);
 				world.spawnEntity(entityarrow);
 				ItemStack newstack = new ItemStack(ItemScytheHidanThrown.block);
@@ -215,7 +218,8 @@ public class ItemScytheHidan extends ElementsNarutomodMod.ModElement {
 			if (entity != null) {
 				if (!entity.equals(this.shootingEntity)) {
 					float f = MathHelper.sqrt(this.getVelocitySq()) * (float)this.getDamage();
-					if (entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.shootingEntity), f)) {
+					if (entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.shootingEntity), f)
+) {
 						if (entity instanceof EntityLivingBase) {
 							this.playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
 							this.motionX *= 0.85d;
@@ -306,11 +310,6 @@ public class ItemScytheHidan extends ElementsNarutomodMod.ModElement {
 					this.setDead();
 				}
 			}
-		}
-
-		@Override
-		public boolean canBeCollidedWith() {
-			return !this.isDead;
 		}
 
 		protected ItemStack getArrowStack() {

@@ -32,6 +32,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 
+import net.narutomod.PlayerTracker;
 import net.narutomod.procedure.ProcedureUtils;
 import net.narutomod.item.ItemMokuton;
 import net.narutomod.item.ItemJutsu;
@@ -149,6 +150,12 @@ public class EntityWoodGolem extends ElementsNarutomodMod.ModElement {
 			}
 			if (this.chakraBurn > 0.0d && this.ticksExisted % 20 == 19) {
 				EntityLivingBase summoner = this.getSummoner();
+
+				if (summoner instanceof EntityPlayer) {
+					double battleXp = PlayerTracker.getBattleXp((EntityPlayer) summoner);
+					this.chakraBurn = ((battleXp/2)*.025);
+				}
+
 				if (summoner != null && !Chakra.pathway(summoner).consume(this.chakraBurn)) {
 					this.setDead();
 				}

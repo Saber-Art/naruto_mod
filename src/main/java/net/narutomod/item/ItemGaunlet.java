@@ -358,11 +358,6 @@ public class ItemGaunlet extends ElementsNarutomodMod.ModElement {
 			}
 		}
 
-		@Override
-		public boolean canBeCollidedWith() {
-			return !this.isDead;
-		}
-
 		protected ItemStack getArrowStack() {
 			return this.stack;
 		}
