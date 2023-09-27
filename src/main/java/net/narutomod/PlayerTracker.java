@@ -1,5 +1,6 @@
 package net.narutomod;
 
+import net.minecraft.world.GameRules;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -47,9 +48,14 @@ import com.google.common.collect.Maps;
 public class PlayerTracker extends ElementsNarutomodMod.ModElement {
 	private static final String BATTLEXP = NarutomodModVariables.BATTLEXP;
 	private static final String KEEPXP_RULE = "keepNinjaXp";
+
+	private static final String XPCAP_RULE = "ninjaXpCap";
 	public static final String FORCE_DOJUTSU_DROP_RULE = "forceDojutsuDropOnDeath";
 	private static final String FORCE_SEND = "forceSendBattleXP2self";
 	private static final String UPDATE_HEALTH = "forceUpdateHealth";
+
+	private static final double xpCap = -1.0d;
+	private static final double baseXPCap = 200000.0d;
 
 	public PlayerTracker(ElementsNarutomodMod instance) {
 		super(instance, 181);
@@ -72,7 +78,8 @@ public class PlayerTracker extends ElementsNarutomodMod.ModElement {
 	}
 
 	private static void addBattleXp(EntityPlayer entity, double xp, boolean sendMessage) {
-		entity.getEntityData().setDouble(BATTLEXP, Math.min(getBattleXp(entity) + xp, 200000.0d));
+		World world = entity.getEntityWorld();
+		entity.getEntityData().setDouble(BATTLEXP, Math.min(getBattleXp(entity) + xp, (double) world.getGameRules().getInt(XPCAP_RULE)));
 		if (entity instanceof EntityPlayerMP) {
 			sendBattleXPToTracking((EntityPlayerMP)entity);
 			if (sendMessage) {
@@ -214,8 +221,13 @@ public class PlayerTracker extends ElementsNarutomodMod.ModElement {
 		public void onTick(TickEvent.PlayerTickEvent event) {
 			if (event.phase == TickEvent.Phase.END && event.player instanceof EntityPlayerMP) {
 
-				double d;
 				double battleXp = getBattleXp(event.player);
+
+				//Force Updates Player Xp for GameRule
+				addBattleXp(event.player, 0, false);
+				//sendBattleXPToSelf((EntityPlayerMP) event.player);
+
+				double d;
 				double flat = 100000.0d;
 				double max = flat * 2d;
 
@@ -355,6 +367,9 @@ public class PlayerTracker extends ElementsNarutomodMod.ModElement {
 		@SubscribeEvent
 		public void onWorldLoad(WorldEvent.Load event) {
 			World world = event.getWorld();
+			if (!world.isRemote && !world.getGameRules().hasRule(XPCAP_RULE)) {
+				world.getGameRules().addGameRule(XPCAP_RULE, String.valueOf(baseXPCap), GameRules.ValueType.NUMERICAL_VALUE);
+			}
 			if (!world.isRemote && !world.getGameRules().hasRule(KEEPXP_RULE)) {
 				world.getGameRules().addGameRule(KEEPXP_RULE, "false", net.minecraft.world.GameRules.ValueType.BOOLEAN_VALUE);
 			}

@@ -465,7 +465,7 @@ public class ProcedureUtils extends ElementsNarutomodMod.ModElement {
 	}
 
 	public static boolean isWearingAnySharingan(EntityLivingBase entity) {
-		return entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == ItemSharingan.helmet || isWearingMangekyo(entity);
+		return entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemSharingan.Base || isWearingMangekyo(entity);
 	}
 
 	public static boolean isWearingMangekyo(EntityLivingBase entity) {
