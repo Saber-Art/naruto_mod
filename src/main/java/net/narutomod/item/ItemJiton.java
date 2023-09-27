@@ -46,6 +46,7 @@ import net.narutomod.entity.EntityShieldBase;
 import net.narutomod.entity.EntitySandBullet;
 import net.narutomod.entity.EntitySandBind;
 import net.narutomod.entity.EntitySandLevitation;
+import net.narutomod.entity.EntitySandGathering;
 import net.narutomod.entity.EntityBijuManager;
 import net.narutomod.PlayerTracker;
 import net.narutomod.Chakra;
@@ -70,6 +71,7 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 	public static final ItemJutsu.JutsuEnum SANDBULLET = new ItemJutsu.JutsuEnum(1, "sand_bullet", 'S', 100, 20d, new EntitySandBullet.EC.Jutsu());
 	public static final ItemJutsu.JutsuEnum SANDBIND = new ItemJutsu.JutsuEnum(2, "sand_bind", 'S', 200, 1000d, new EntitySandBind.EC.Jutsu());
 	public static final ItemJutsu.JutsuEnum SANDFLY = new ItemJutsu.JutsuEnum(3, "sand_levitation", 'S', 200, 0.25d, new EntitySandLevitation.EC.Jutsu());
+	public static final ItemJutsu.JutsuEnum GATHERING = new ItemJutsu.JutsuEnum(4, "sand_gathering", 'S', 200, 100d, new EntitySandGathering.EC.Jutsu());
 
 	public ItemJiton(ElementsNarutomodMod instance) {
 		super(instance, 518);
@@ -77,7 +79,7 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 
 	@Override
 	public void initElements() {
-		elements.items.add(() -> new RangedItem(SANDSHIELD, SANDBULLET, SANDBIND, SANDFLY));
+		elements.items.add(() -> new RangedItem(SANDSHIELD, SANDBULLET, SANDBIND, SANDFLY, GATHERING));
 		elements.entities.add(() -> EntityEntryBuilder.create().entity(EntitySandShield.class)
 		 .id(new ResourceLocation("narutomod", "entityjitonshield"), ENTITYID).name("entityjitonshield").tracker(64, 1, true).build());
 		elements.entities.add(() -> EntityEntryBuilder.create().entity(SandParticle.class)
@@ -189,6 +191,7 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 				 && this.getCurrentJutsu(itemstack) == SANDBULLET) {
 					EntitySandBullet.updateSwarms(itemstack);
 				}
+				this.enableJutsu(itemstack, GATHERING, getSandType(itemstack) == Type.IRON);
 			}
 		}
 
@@ -259,7 +262,7 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 		};
 
 		public static Type getTypeFromId(int i) {
-			return TYPES.get(Integer.valueOf(i));
+			return i >= 0 && i <= 2 ? TYPES.get(Integer.valueOf(i)) : IRON;
 		}
 	}
 
@@ -481,7 +484,7 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 		private World world;
 		private int total;
 		private Vec3d startPos;
-		//private Vec3d targetPos;
+		private AxisAlignedBB startBB;
 		private AxisAlignedBB targetBB;
 		private float speed;
 		private float inaccuracy;
@@ -535,13 +538,42 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 			this.border = this.particles.get(0).getEntityBoundingBox();
 		}
 
+		public SwarmTarget(World worldIn, int totalIn, AxisAlignedBB startBBIn, Vec3d targetPos, Vec3d initialMotion, float speedIn, float inaccuracyIn, boolean dieOnReached, float scaleIn, int colorIn) {
+			this.world = worldIn;
+			this.total = totalIn;
+			this.startBB = startBBIn;
+			this.setTarget(targetPos, speedIn, inaccuracyIn, dieOnReached);
+			this.particles = Lists.newArrayList();
+			this.rand = new Random();
+			this.spawnMotion = initialMotion;
+			this.scale = scaleIn;
+			this.color = colorIn;
+			this.spawnNewParticles();
+			this.border = this.particles.get(0).getEntityBoundingBox();
+		}
+
+		public SwarmTarget(World worldIn, int totalIn, AxisAlignedBB startBBIn, AxisAlignedBB targetBBIn, Vec3d initialMotion, float speedIn, float inaccuracyIn, boolean dieOnReached, float scaleIn, int colorIn) {
+			this.world = worldIn;
+			this.total = totalIn;
+			this.startBB = startBBIn;
+			this.setTarget(targetBBIn, speedIn, inaccuracyIn, dieOnReached);
+			this.particles = Lists.newArrayList();
+			this.rand = new Random();
+			this.spawnMotion = initialMotion;
+			this.scale = scaleIn;
+			this.color = colorIn;
+			this.spawnNewParticles();
+			this.border = this.particles.get(0).getEntityBoundingBox();
+		}
+
 		protected Entity createParticle(double x, double y, double z, double mx, double my, double mz, int c, float sc, int life) {
 			return new SandParticle(this.world, x, y, z, mx, my, mz, c, sc, life);
 		}
 
 		private void spawnNewParticles() {
 			for (int i = 0; this.spawned < this.total && i < 5; i++, this.spawned++) {
-				Entity p = this.createParticle(this.startPos.x, this.startPos.y, this.startPos.z,
+				Vec3d vec = this.startPos != null ? this.startPos : this.randomPosInBB(this.startBB);
+				Entity p = this.createParticle(vec.x, vec.y, vec.z,
 				 (this.rand.nextDouble()-0.5d) * 2d * this.spawnMotion.x, this.spawnMotion.y,
 				 (this.rand.nextDouble()-0.5d) * 2d * this.spawnMotion.z, this.color,
 				 this.scale + (this.rand.nextFloat()-0.5f) * this.scale * 0.2f, 3600);
@@ -657,10 +689,14 @@ public class ItemJiton extends ElementsNarutomodMod.ModElement {
 			return this.randomPosOnBB(this.targetBB);
 		}
 
-		private Vec3d randomPosOnBB(AxisAlignedBB aabb) {
-			final Vec3d vec0 = new Vec3d(aabb.minX + this.rand.nextDouble() * (aabb.maxX - aabb.minX),
+		private Vec3d randomPosInBB(AxisAlignedBB aabb) {
+			return new Vec3d(aabb.minX + this.rand.nextDouble() * (aabb.maxX - aabb.minX),
 			 aabb.minY + this.rand.nextDouble() * (aabb.maxY - aabb.minY),
 			 aabb.minZ + this.rand.nextDouble() * (aabb.maxZ - aabb.minZ));
+		}
+		
+		private Vec3d randomPosOnBB(AxisAlignedBB aabb) {
+			Vec3d vec0 = this.randomPosInBB(aabb);
 			final Vec3d[] vec1 = { new Vec3d(aabb.minX, vec0.y, vec0.z), new Vec3d(aabb.maxX, vec0.y, vec0.z),
 			 new Vec3d(vec0.x, aabb.minY, vec0.z), new Vec3d(vec0.x, aabb.maxY, vec0.z),
 			 new Vec3d(vec0.x, vec0.y, aabb.minZ), new Vec3d(vec0.x, vec0.y, aabb.maxZ) };

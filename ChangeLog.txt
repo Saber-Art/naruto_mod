@@ -1,3 +1,8 @@
+0.3.1-beta ================================================================================
+
+Jutsus:
+ - added 3 minute coolddown on shinsusenju
+
 0.3.0-beta ================================================================================
 
 Jutsus:
@@ -33,6 +38,9 @@ Jutsus:
  - updated sand bullets particle effects
  - updated kirin lightning storm effects
  - widened ice spears spawn range when charged more
+ - reduced rasenshuriken effect particles to reduce client lag
+ - buffed lightning chakra mode strength, depends on chakra level
+ - added sand gathering jutsu
 
 Items:
  - fixed explosive tags breaking blocks when mobGriefing false
@@ -50,6 +58,7 @@ Items:
  - removed rasenshuriken scroll (its enabled when rasengan is fully learned)
  - better kusanagi sword's entity targeting
  - added recipies for posion bomb, poison senbon, and senbon puppet arm
+ - will display current selected jutsu when player starts holding a jutsu item
  
 Entities:
  - re-textured white zetsu, itachi

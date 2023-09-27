@@ -1,6 +1,6 @@
 {
   "id_map": {
-    "ENTITY": 427,
+    "ENTITY": 431,
     "GUI": 64,
     "DIMENSION": 13
   },
@@ -7161,7 +7161,46 @@
       "compiles": true,
       "locked_code": true,
       "ids": {},
-      "registry_name": "speedy"
+      "registry_name": "chakra_blades_recipe"
+    },
+    {
+      "name": "GauntletRecipe",
+      "type": "recipe",
+      "sortid": 855,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "registry_name": "gauntlet_recipe"
+    },
+    {
+      "name": "SenbonArmRecipe",
+      "type": "recipe",
+      "sortid": 856,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "registry_name": "senbon_arm_recipe"
+    },
+    {
+      "name": "PoisonSenbonRecipe",
+      "type": "recipe",
+      "sortid": 857,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "poison_senbon_recipe"
+    },
+    {
+      "name": "SandGathering",
+      "type": "mob",
+      "sortid": 858,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {
+        "0": 430,
+        "1": 431
+      },
+      "registry_name": "sand_gathering"
     }
   ],
   "variable_elements": [
@@ -8126,8 +8165,8 @@
   ],
   "language_map": {
     "en_us": {
-      "item.kiba_blades.name": "Kiba Blades",
       "entity.crow.name": "Crow",
+      "item.kiba_blades.name": "Kiba Blades",
       "chattext.gedomazo.cantspawn": "Can\u0027t summon Gedo Mazo, it\u0027s already in the world",
       "entity.tenten.name": "Tenten",
       "item.futton.name": "Boil Release",
@@ -8147,8 +8186,6 @@
       "item.scroll_water_dragon.name": "Water Release - Water Dragon Bullet",
       "entity.tailed_beast.name": "Tailed Beast",
       "item.gunbai.name": "Gunbai",
-      "entity.ice_walk_toggle.name": "Toggle Water Freezing",
-      "item.scroll_rasenshuriken.name": "Wind Release - Rasenshuriken",
       "entity.itachi.name": "Itachi Uchiha",
       "item.scroll_lightning_panther.name": "Lightning Release: Black Panther",
       "item.clothes_raikagehelmet.name": "Raikage Hat",
@@ -8758,6 +8795,7 @@
       "item.kamuidimension.name": "Kamui Dimension Portal Igniter",
       "item.iryo_jutsu.name": "Medical Ninjutsu",
       "item.mask_anbu_1helmet.name": "Mask Anbu",
+      "entity.sand_gathering.name": "Sand Gathering",
       "advancements.rinneganawakened.descr": "It is said that in times of disorder, one who wields the Rinnegan is sent down from the heavens to become either a \"God of Creation\" who will calm the world or a \"God of Destruction\" who will reduce everything to nothingness.",
       "tipped_arrow.effect.heaviness": "Arrow of Heaviness",
       "subtitles.woodgrow": "",
@@ -8837,7 +8875,7 @@
   "workspaceSettings": {
     "modid": "narutomod",
     "modName": "NarutoMod",
-    "version": "0.3.2-beta-so",
+    "version": "0.3.1-beta",
     "author": "AHZNB",
     "websiteURL": "https://www.youtube.com/c/AHZNB",
     "license": "GNU General Public License version 3 (GPLv3)",

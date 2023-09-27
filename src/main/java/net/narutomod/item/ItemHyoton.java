@@ -42,7 +42,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentFrostWalker;
 import net.minecraft.nbt.NBTTagCompound;
 
-import net.narutomod.entity.*;
+import net.narutomod.entity.EntityRendererRegister;
+import net.narutomod.entity.EntitySpike;
+import net.narutomod.entity.EntityIceSpear;
+import net.narutomod.entity.EntityIceDome;
+import net.narutomod.entity.EntityIcePrison;
 import net.narutomod.procedure.ProcedureUtils;
 import net.narutomod.creativetab.TabModTab;
 import net.narutomod.EntityTracker;
@@ -50,40 +54,21 @@ import net.narutomod.ElementsNarutomodMod;
 
 import java.util.List;
 
-@ElementsNarutomodMod.ModElement.Tag
-public class ItemHyoton extends ElementsNarutomodMod.ModElement {
-	@GameRegistry.ObjectHolder("narutomod:hyoton")
-	public static final Item block = null;
-	public static final int ENTITYID = 219;
-
-	public static final ItemJutsu.JutsuEnum ICETOGGLE = new ItemJutsu.JutsuEnum(0, "ice_walk_toggle", 'S', 1, 50d, new IceToggleJutsu());
-	public static final ItemJutsu.JutsuEnum KILLSPIKES = new ItemJutsu.JutsuEnum(1, "ice_spike", 'S', 150, 20d, new EntityIceSpike.Jutsu());
-	public static final ItemJutsu.JutsuEnum ICESPEARS = new ItemJutsu.JutsuEnum(2, "ice_spear", 'S', 150, 20d, new EntityIceSpear.EC.Jutsu());
-	public static final ItemJutsu.JutsuEnum ICEDOME = new ItemJutsu.JutsuEnum(3, "ice_dome", 'S', 200, 500d, new EntityIceDome.EC.Jutsu());
-	public static final ItemJutsu.JutsuEnum ICEPRISON = new ItemJutsu.JutsuEnum(4, "ice_prison", 'S', 150, 50d, new EntityIcePrison.EC.Jutsu());
-
-
 	public ItemHyoton(ElementsNarutomodMod instance) {
 		super(instance, 531);
 	}
 
 	@Override
 	public void initElements() {
-		elements.items.add(() -> new RangedItem(ICETOGGLE, KILLSPIKES, ICESPEARS, ICEDOME, ICEPRISON));
+		elements.items.add(() -> new RangedItem(KILLSPIKES, ICESPEARS, ICEDOME, ICEPRISON));
 		elements.entities.add(() -> EntityEntryBuilder.create().entity(EntityIceSpike.class)
-		 .id(new ResourceLocation("narutomod", "ice_spike"), ENTITYID).name("ice_spike").tracker(64, 1, true).build());
+		.id(new ResourceLocation("narutomod", "ice_spike"), ENTITYID).name("ice_spike").tracker(64, 1, true).build());
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerModels(ModelRegistryEvent event) {
 		ModelLoader.setCustomModelResourceLocation(block, 0, new ModelResourceLocation("narutomod:hyoton", "inventory"));
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void preInit(FMLPreInitializationEvent event) {
-		RenderingRegistry.registerEntityRenderingHandler(EntityIceSpike.class, renderManager -> new CustomRender(renderManager));
 	}
 
 	@Override
@@ -303,17 +288,30 @@ public class ItemHyoton extends ElementsNarutomodMod.ModElement {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
-	public class CustomRender extends EntitySpike.Renderer<EntityIceSpike> {
-		private final ResourceLocation TEXTURE = new ResourceLocation("narutomod:textures/spike_ice.png");
+	@Override
+	public void preInit(FMLPreInitializationEvent event) {
+		new Renderer().register();
+	}
 
-		public CustomRender(RenderManager renderManagerIn) {
-			super(renderManagerIn);
+	public static class Renderer extends EntityRendererRegister {
+		@SideOnly(Side.CLIENT)
+		@Override
+		public void register() {
+			RenderingRegistry.registerEntityRenderingHandler(EntityIceSpike.class, renderManager -> new CustomRender(renderManager));
 		}
 
-		@Override
-		protected ResourceLocation getEntityTexture(EntityIceSpike entity) {
-			return TEXTURE;
+		@SideOnly(Side.CLIENT)
+		public class CustomRender extends EntitySpike.Renderer<EntityIceSpike> {
+			private final ResourceLocation texture = new ResourceLocation("narutomod:textures/spike_ice.png");
+	
+			public CustomRender(RenderManager renderManagerIn) {
+				super(renderManagerIn);
+			}
+	
+			@Override
+			protected ResourceLocation getEntityTexture(EntityIceSpike entity) {
+				return this.texture;
+			}
 		}
 	}
 }
