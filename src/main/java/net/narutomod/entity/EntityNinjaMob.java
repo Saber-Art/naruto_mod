@@ -2,6 +2,9 @@
 package net.narutomod.entity;
 
 
+import com.google.common.collect.Maps;
+import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.model.ModelBase;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -74,6 +77,7 @@ import java.util.List;
 import java.util.Arrays;
 import com.google.common.collect.Lists;
 import java.io.IOException;
+import java.util.Map;
 
 @ElementsNarutomodMod.ModElement.Tag
 public class EntityNinjaMob extends ElementsNarutomodMod.ModElement {
@@ -89,7 +93,7 @@ public class EntityNinjaMob extends ElementsNarutomodMod.ModElement {
 		private static final DataParameter<Float> CHAKRA_MAX = EntityDataManager.createKey(Base.class, DataSerializers.FLOAT);
 		private static final DataParameter<Float> CHAKRA = EntityDataManager.createKey(Base.class, DataSerializers.FLOAT);
 		private final PathwayNinjaMob chakraPathway;
-		private final NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(2, ItemStack.EMPTY);
+		private final NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
 		public int peacefulTicks;
 		private int standStillTicks;
 
@@ -862,14 +866,28 @@ public class EntityNinjaMob extends ElementsNarutomodMod.ModElement {
 	@SideOnly(Side.CLIENT)
 	public static class LayerInventoryItem implements LayerRenderer<Base> {
 		private final RenderBiped renderer;
+		private static final Map<String, ResourceLocation> ARMOR_TEXTURE_RES_MAP = Maps.<String, ResourceLocation>newHashMap();
 
 		public LayerInventoryItem(RenderBiped rendererIn) {
 			this.renderer = rendererIn;
 		}
 
 		@Override
-		public void doRenderLayer(Base entityIn, float f1, float f2, float f3, float f4, float f5, float f6, float f7) {
+		public void doRenderLayer(Base entityIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 			for (int i = 0; i < entityIn.inventory.size(); ++i) {
+				ItemStack stack = entityIn.inventory.get(i);
+				//if ((i < entityIn.inventory.mainInventory.size() || i >= entityIn.inventory.mainInventory.size() + entityIn.inventory.armorInventory.size())
+				if (stack.getItem() instanceof ItemOnBody.Interface) {
+					ItemOnBody.Interface item = (ItemOnBody.Interface)stack.getItem();
+					if (item.showSkinLayer()) {
+						this.renderSkinLayer(stack, entityIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
+					}
+					if (item.showOnBody() != ItemOnBody.BodyPart.NONE && i != 40) {
+						this.renderItemOnBody(stack, entityIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
+					}
+				}
+
+				/*
 				ItemStack stack = entityIn.inventory.get(i);
 				if (stack.getItem() instanceof ItemOnBody.Interface) {
 					ItemOnBody.Interface item = (ItemOnBody.Interface)stack.getItem();
@@ -901,11 +919,83 @@ public class EntityNinjaMob extends ElementsNarutomodMod.ModElement {
 						GlStateManager.translate(offset.x, -0.25F + offset.y, offset.z);
 						GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
 						GlStateManager.scale(0.625F, -0.625F, -0.625F);
-						Minecraft.getMinecraft().getItemRenderer().renderItem(entityIn, stack, ItemCameraTransforms.TransformType.HEAD);
+
+						ItemStack stackToRender = ((ItemOnBody.Interface)stack.getItem()).getRenderStack();
+						if (stackToRender == null) {
+							stackToRender = stack;
+						}
+
+						if (((ItemOnBody.Interface)stack.getItem()).canRender()) {
+							Minecraft.getMinecraft().getItemRenderer().renderItem(entityIn, stackToRender, ItemCameraTransforms.TransformType.HEAD);
+						}
 						GlStateManager.popMatrix();
 					}
 				}
+				 */
 			}
+		}
+
+		private void renderSkinLayer(ItemStack stack, EntityLivingBase entityIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+			ModelBiped model = stack.getItem().getArmorModel(entityIn, stack, EntityEquipmentSlot.HEAD, new ModelBiped(1.0F));
+			if (model != null) {
+				String s = stack.getItem().getArmorTexture(stack, entityIn, EntityEquipmentSlot.HEAD, null);
+				if (s != null) {
+					ResourceLocation resourcelocation = (ResourceLocation)ARMOR_TEXTURE_RES_MAP.get(s);
+					if (resourcelocation == null) {
+						resourcelocation = new ResourceLocation(s);
+						ARMOR_TEXTURE_RES_MAP.put(s, resourcelocation);
+					}
+					//model.isSneak = this.renderer.getMainModel().isSneak;
+					model.setLivingAnimations(entityIn, limbSwing, limbSwingAmount, partialTicks);
+					this.renderer.bindTexture(resourcelocation);
+					model.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+				}
+			}
+		}
+
+		private void renderItemOnBody(ItemStack stack, EntityLivingBase entityIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+			Vec3d offset = ((ItemOnBody.Interface)stack.getItem()).getOffset();
+			ItemOnBody.BodyPart bodypart = ((ItemOnBody.Interface)stack.getItem()).showOnBody();
+			GlStateManager.pushMatrix();
+			ModelBiped model = (ModelBiped) this.renderer.getMainModel();
+			//model.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
+			if (entityIn.isSneaking()) {
+				GlStateManager.translate(0.0F, 0.2F, 0.0F);
+			}
+			switch (bodypart) {
+				case HEAD:
+					model.bipedHead.postRender(0.0625F);
+					break;
+				case TORSO:
+					model.bipedBody.postRender(0.0625F);
+					break;
+				case RIGHT_ARM:
+					model.bipedRightArm.postRender(0.0625F);
+					break;
+				case LEFT_ARM:
+					model.bipedLeftArm.postRender(0.0625F);
+					break;
+				case RIGHT_LEG:
+					model.bipedRightLeg.postRender(0.0625F);
+					break;
+				case LEFT_LEG:
+					model.bipedLeftLeg.postRender(0.0625F);
+					break;
+			}
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.translate(offset.x, -0.25F + offset.y, offset.z);
+			GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+			GlStateManager.scale(0.625F, -0.625F, -0.625F);
+
+			ItemStack stackToRender = ((ItemOnBody.Interface)stack.getItem()).getRenderStack();
+			if (stackToRender == null) {
+				stackToRender = stack;
+			}
+
+			if (((ItemOnBody.Interface)stack.getItem()).canRender()) {
+				Minecraft.getMinecraft().getItemRenderer().renderItem(entityIn, stackToRender, ItemCameraTransforms.TransformType.HEAD);
+			}
+			GlStateManager.popMatrix();
 		}
 
 		@Override

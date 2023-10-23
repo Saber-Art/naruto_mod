@@ -118,7 +118,7 @@ public class EntityKisameHoshigaki extends ElementsNarutomodMod.ModElement {
 		private final double WATERSHARK_CHAKRA = 75d;
 		private final double WATERPRISON_CHAKRA = 200d;
 		private final double WATERCLONE_CHAKRA = 500d;
-		private final double WATERSHOCK_CHAKRA = 600d;
+		private final double WATERSHOCK_CHAKRA = 9999999d;
 		private int prisonLastUsed = -WATERPRISON_CD;
 		private int cloneLastUsed = -WATERCLONE_CD;
 		private int lastBlockTime;
@@ -234,8 +234,8 @@ public class EntityKisameHoshigaki extends ElementsNarutomodMod.ModElement {
 		@Override
 		protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
 			if (!this.isClone()) {
-				this.entityDropItem(this.getHeldItemMainhand(), 0f);
-				this.entityDropItem(this.getItemFromInventory(0), 0f);
+				//this.entityDropItem(this.getHeldItemMainhand(), 0f);
+				//this.entityDropItem(this.getItemFromInventory(0), 0f);
 			}
 		}
 

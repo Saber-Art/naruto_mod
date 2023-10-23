@@ -149,7 +149,6 @@ public class ItemRaiton extends ElementsNarutomodMod.ModElement {
 	public static class EntityChakraMode extends Entity {
 		private final double CHAKRA_BURN = ItemSpeedy.CHAKRAMODE.chakraUsage; // per second
 		//private int maxCooldown = 400;
-		private final double CHAKRA_BURN = CHAKRAMODE.chakraUsage; // per second
 		private EntityLivingBase summoner;
 		private ItemStack usingItemstack;
 		private int strengthAmplifier = 9;

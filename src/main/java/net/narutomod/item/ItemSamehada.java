@@ -1,6 +1,7 @@
 
 package net.narutomod.item;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -140,6 +141,10 @@ public class ItemSamehada extends ElementsNarutomodMod.ModElement {
 		@Override
 		public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 			playerIn.setActiveHand(handIn);
+
+			//Make Block Timer
+
+
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 		}
 

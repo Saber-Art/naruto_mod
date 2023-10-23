@@ -70,8 +70,8 @@ public class ItemSoundGaunlet extends ElementsNarutomodMod.ModElement {
 				Vec3d vec1 = entity.getLookVec();
 				Vec3d vec2 = vec1.add(vec0);
 				entity.world.playSound(null, vec2.x, vec2.y, vec2.z,
-					 net.minecraft.util.SoundEvent.REGISTRY.getObject(new ResourceLocation("narutomod:highpitch")),
-					 SoundCategory.NEUTRAL, 1.0f, 1.0f + this.itemRand.nextFloat() * 0.3f);
+					 net.minecraft.util.SoundEvent.REGISTRY.getObject(new ResourceLocation("narutomod:sharingansfx")),
+					 SoundCategory.NEUTRAL, 0.1f, 0.1f + this.itemRand.nextFloat() * 0.3f);
 				for (int i = 1, j = 20; i <= j; i++) {
 					float f = (float)i / j;
 					Vec3d vec3 = vec1.scale(1.5d * f);

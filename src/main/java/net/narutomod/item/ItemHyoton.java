@@ -53,14 +53,23 @@ import net.narutomod.EntityTracker;
 import net.narutomod.ElementsNarutomodMod;
 
 import java.util.List;
-
+@ElementsNarutomodMod.ModElement.Tag
+public class ItemHyoton extends ElementsNarutomodMod.ModElement {
+	@GameRegistry.ObjectHolder("narutomod:hyoton")
+	public static final Item block = null;
+	public static final int ENTITYID = 219;
+	public static final ItemJutsu.JutsuEnum ICETOGGLE = new ItemJutsu.JutsuEnum(0, "ice_toggle", 'S', 150, 20d, new IceToggleJutsu());
+	public static final ItemJutsu.JutsuEnum KILLSPIKES = new ItemJutsu.JutsuEnum(1, "ice_spike", 'S', 150, 20d, new EntityIceSpike.Jutsu());
+	public static final ItemJutsu.JutsuEnum ICESPEARS = new ItemJutsu.JutsuEnum(2, "ice_spear", 'S', 150, 20d, new EntityIceSpear.EC.Jutsu());
+	public static final ItemJutsu.JutsuEnum ICEDOME = new ItemJutsu.JutsuEnum(3, "ice_dome", 'S', 200, 100d, new EntityIceDome.EC.Jutsu());
+	public static final ItemJutsu.JutsuEnum ICEPRISON = new ItemJutsu.JutsuEnum(4, "ice_prison", 'S', 150, 50d, new EntityIcePrison.EC.Jutsu());
 	public ItemHyoton(ElementsNarutomodMod instance) {
 		super(instance, 531);
 	}
 
 	@Override
 	public void initElements() {
-		elements.items.add(() -> new RangedItem(KILLSPIKES, ICESPEARS, ICEDOME, ICEPRISON));
+		elements.items.add(() -> new RangedItem(ICETOGGLE, KILLSPIKES, ICESPEARS, ICEDOME, ICEPRISON));
 		elements.entities.add(() -> EntityEntryBuilder.create().entity(EntityIceSpike.class)
 		.id(new ResourceLocation("narutomod", "ice_spike"), ENTITYID).name("ice_spike").tracker(64, 1, true).build());
 	}

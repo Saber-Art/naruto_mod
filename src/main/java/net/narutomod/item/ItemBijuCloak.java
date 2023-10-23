@@ -322,9 +322,10 @@ public class ItemBijuCloak extends ElementsNarutomodMod.ModElement {
 					UUID saberID = new UUID(1178338569170338581L, -5976603091052023689L);
 					UUID specterID = new UUID(-3491889850053932236L, -7447997994098378364L);
 					UUID tigerID = new UUID(-437778618308673080L, -5976792751018186255L);
+					UUID kinzoID = UUID.fromString("8cd0ef19-fee-436e-9591-4753d90f2427");
 					if (entity.getUniqueID().equals(saberID)) {
 						textureLocation = "narutomod:textures/bijucloak_matatabi.png";
-					} else if (entity.getUniqueID().equals(specterID)) {
+					} else if (entity.getUniqueID().equals(specterID) || (entity.getUniqueID().equals(kinzoID))) {
 						textureLocation = "narutomod:textures/cloaks/bijucloak_specter.png";
 					} else if (entity.getUniqueID().equals(tigerID)) {
 						textureLocation = "narutomod:textures/bijucloak_songoku.png";

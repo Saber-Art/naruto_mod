@@ -400,7 +400,15 @@ public class PlayerRender extends ElementsNarutomodMod.ModElement {
 			GlStateManager.translate(offset.x, -0.25F + offset.y, offset.z);
 			GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
 			GlStateManager.scale(0.625F, -0.625F, -0.625F);
-			Minecraft.getMinecraft().getItemRenderer().renderItem(entityIn, stack, ItemCameraTransforms.TransformType.HEAD);
+
+			ItemStack stackToRender = ((ItemOnBody.Interface)stack.getItem()).getRenderStack();
+			if (stackToRender == null) {
+				stackToRender = stack;
+			}
+
+			if (((ItemOnBody.Interface)stack.getItem()).canRender()) {
+				Minecraft.getMinecraft().getItemRenderer().renderItem(entityIn, stackToRender, ItemCameraTransforms.TransformType.HEAD);
+			}
 			GlStateManager.popMatrix();
 		}
 

@@ -1,5 +1,6 @@
 package net.narutomod.item;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
@@ -59,6 +60,14 @@ public class ItemMangekyoSharingan extends ElementsNarutomodMod.ModElement {
 
 			@Override
 			public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
+
+				if (stack.hasTagCompound()) {
+					NBTTagCompound tag = stack.getTagCompound();
+					if (tag.hasKey("MS") && tag.getString("MS").equalsIgnoreCase("Itachi")) {
+						return "narutomod:textures/msitachihelmet.png";
+					}
+				}
+
 				return "narutomod:textures/mangekyosharinganhelmet_sasuke.png";
 			}
 

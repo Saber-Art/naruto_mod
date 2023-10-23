@@ -134,7 +134,7 @@ public class ItemRanton extends ElementsNarutomodMod.ModElement {
 				EntityLightningArc.spawnAsParticle(this.world, this.posX + (this.rand.nextDouble()-0.5d) * 2.0d,
 				  this.posY + this.rand.nextDouble() * 1.6d, this.posZ + (this.rand.nextDouble()-0.5d) * 2.0d, 1.2d, 0d, 0d, 0d);
 				Particles.spawnParticle(world, Particles.Types.SMOKE, this.posX, this.posY + 0.9d, this.posZ,
-				  100, 0.4d, 0.6d, 0.4d, 0d, 0d, 0d, 0xff303030, 30, 0, 0, this.summoner.getEntityId(), 0);
+				  5, 0.4d, 0.6d, 0.4d, 0d, 0d, 0d, 0xff303030, 30, 0, 0, this.summoner.getEntityId(), 0);
 				for (EntityLivingBase entity1 : 
 				 this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.summoner.getEntityBoundingBox().grow(4d))) {
 					if (!entity1.equals(this.summoner) && entity1.isEntityAlive()) {

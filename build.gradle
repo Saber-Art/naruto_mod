@@ -53,8 +53,23 @@ sourceSets {
     main { output.resourcesDir = output.classesDir }
 }
 
+repositories {
+    maven {
+        url 'https://cursemaven.com'
+    }
+    maven {
+        name = 'GeckoLib'
+        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+    }
+    flatDir {
+        dirs '/libs'
+    }
+}
+
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
+
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.12.2-3.0.31')
 }
 
 apply from: 'mcreator.gradle'

@@ -38,6 +38,9 @@ public class ItemOnBody extends ElementsNarutomodMod.ModElement {
 	private static Vec3d LEFT_LEG_OFFSET = new Vec3d(-0.125d, -0.6875d, 0d);
 	private static Vec3d RIGHT_ARM_OFFSET = new Vec3d(0.3125d, -0.125d, 0d);
 	private static Vec3d LEFT_ARM_OFFSET = new Vec3d(-0.3125d, -0.125d, 0d);
+
+	private static ItemStack renderStack;
+	private static boolean canRender;
 	
 	public ItemOnBody(ElementsNarutomodMod instance) {
 		super(instance, 711);
@@ -72,6 +75,9 @@ public class ItemOnBody extends ElementsNarutomodMod.ModElement {
 		}
 		default boolean showSkinLayer() { return false; }
 		default BodyPart showOnBody() { return BodyPart.TORSO; }
+
+		default ItemStack getRenderStack() { return null; }
+		default boolean canRender() { return true; }
 	}
 
 	public enum BodyPart {
@@ -142,7 +148,7 @@ public class ItemOnBody extends ElementsNarutomodMod.ModElement {
 
 		private void sync() {
 			if (this.needsUpdate()) {
-//System.out.println("+++ from:"+player.getName()+", cur:"+currentItem+", "+slotMap);
+	//System.out.println("+++ from:"+player.getName()+", cur:"+currentItem+", "+slotMap);
 				NarutomodMod.PACKET_HANDLER.sendToAllTracking(new Message(this), this.player);
 				this.forceUpdate = false;
 			}

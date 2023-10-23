@@ -21,6 +21,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelBiped;
 
+import net.narutomod.PlayerRender;
 import net.narutomod.creativetab.TabModTab;
 import net.narutomod.ElementsNarutomodMod;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,42 +39,14 @@ public class ItemAkatsukiRobe extends ElementsNarutomodMod.ModElement {
 		super(instance, 740);
 	}
 
+	public static ItemArmor.ArmorMaterial ENUMA = EnumHelper.addArmorMaterial("AKATSUKI_ROBE", "narutomod:sasuke_",
+			100, new int[]{1, 2, 3, 1}, 9, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0f);
+
 	@Override
 	public void initElements() {
-		ItemArmor.ArmorMaterial enuma = EnumHelper.addArmorMaterial("AKATSUKI_ROBE", "narutomod:sasuke_",
-		 100, new int[]{1, 2, 3, 1}, 9, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0f);
-		elements.items.add(() -> new ItemArmor(enuma, 0, EntityEquipmentSlot.HEAD) {
-			@SideOnly(Side.CLIENT)
-			private ModelBiped armorModel;
-
-			@Override
-			@SideOnly(Side.CLIENT)
-			public ModelBiped getArmorModel(EntityLivingBase living, ItemStack stack, EntityEquipmentSlot slot, ModelBiped defaultModel) {
-				if (this.armorModel == null) {
-					this.armorModel = new ModelAkatsukiRobe();
-				}
-
-				this.armorModel.isSneak = living.isSneaking();
-				this.armorModel.isRiding = living.isRiding();
-				this.armorModel.isChild = living.isChild();
-				return this.armorModel;
-			}
-
-			@Override
-			public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-				if (player.getRNG().nextInt(200) == 0) {
-					world.playSound(null, player.posX, player.posY, player.posZ,
-					 net.minecraft.util.SoundEvent.REGISTRY.getObject(new ResourceLocation("narutomod:dingding")),
-					 net.minecraft.util.SoundCategory.PLAYERS, 0.8f, player.getRNG().nextFloat() * 0.1f + 0.95f);
-				}
-			}
-
-			@Override
-			public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-				return "narutomod:textures/robe_akatsuki.png";
-			}
+		elements.items.add(() -> new Base(ENUMA, 0, EntityEquipmentSlot.HEAD) {
 		}.setUnlocalizedName("akatsuki_robehelmet").setRegistryName("akatsuki_robehelmet").setCreativeTab(TabModTab.tab));
-		elements.items.add(() -> new ItemArmor(enuma, 0, EntityEquipmentSlot.CHEST) {
+		elements.items.add(() -> new ItemArmor(ENUMA, 0, EntityEquipmentSlot.CHEST) {
 			@SideOnly(Side.CLIENT)
 			private ModelBiped armorModel;
 
@@ -101,6 +74,75 @@ public class ItemAkatsukiRobe extends ElementsNarutomodMod.ModElement {
 	public void registerModels(ModelRegistryEvent event) {
 		ModelLoader.setCustomModelResourceLocation(helmet, 0, new ModelResourceLocation("narutomod:akatsuki_robehelmet", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(body, 0, new ModelResourceLocation("narutomod:akatsuki_robebody", "inventory"));
+	}
+
+	private class Base extends ItemArmor implements ItemOnBody.Interface {
+
+		public Base(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn) {
+			super(materialIn, renderIndexIn, equipmentSlotIn);
+		}
+
+		@SideOnly(Side.CLIENT)
+		private ModelBiped armorModel;
+		private boolean equipped = false;
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public ModelBiped getArmorModel(EntityLivingBase living, ItemStack stack, EntityEquipmentSlot slot, ModelBiped defaultModel) {
+			if (this.armorModel == null) {
+				this.armorModel = new ModelAkatsukiRobe();
+			}
+
+			if (!equipped) {
+				this.armorModel.bipedBody.showModel = false;
+				this.armorModel.bipedLeftArm.showModel = false;
+				this.armorModel.bipedRightArm.showModel = false;
+				this.armorModel.bipedLeftLeg.showModel = false;
+				this.armorModel.bipedRightLeg.showModel = false;
+			}
+
+			this.armorModel.isSneak = living.isSneaking();
+			this.armorModel.isRiding = living.isRiding();
+			this.armorModel.isChild = living.isChild();
+			return this.armorModel;
+		}
+
+		@Override
+		public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+			this.equipped = true;
+			if (player.getRNG().nextInt(200) == 0) {
+				world.playSound(null, player.posX, player.posY, player.posZ,
+						net.minecraft.util.SoundEvent.REGISTRY.getObject(new ResourceLocation("narutomod:dingding")),
+						net.minecraft.util.SoundCategory.PLAYERS, 0.8f, player.getRNG().nextFloat() * 0.1f + 0.95f);
+			}
+		}
+
+		@Override
+		public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+			super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+
+			this.equipped = false;
+		}
+
+		@Override
+		public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
+			return "narutomod:textures/robe_akatsuki.png";
+		}
+
+
+		@Override
+		public boolean showSkinLayer() { return true; }
+		@Override
+		public ItemOnBody.BodyPart showOnBody() {
+			return ItemOnBody.BodyPart.HEAD;
+		}
+
+		@Override
+		public ItemStack getRenderStack() { return null; }
+
+		@Override
+		public boolean canRender() { return false; }
+
 	}
 
 	// Made with Blockbench 4.3.1

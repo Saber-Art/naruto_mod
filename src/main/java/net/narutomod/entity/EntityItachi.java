@@ -1,6 +1,8 @@
 
 package net.narutomod.entity;
 
+import net.minecraft.entity.*;
+import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
@@ -36,15 +38,9 @@ import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWatchClosest2;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.Entity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -54,6 +50,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.nbt.NBTTagCompound;
 
+import net.narutomod.item.*;
 import net.narutomod.potion.PotionAmaterasuFlame;
 import net.narutomod.potion.PotionParalysis;
 import net.narutomod.entity.EntitySusanooClothed;
@@ -61,12 +58,6 @@ import net.narutomod.entity.EntityCrow;
 import net.narutomod.procedure.ProcedureUtils;
 import net.narutomod.procedure.ProcedureBasicNinjaSkills;
 import net.narutomod.procedure.ProcedureSync;
-import net.narutomod.item.ItemSharingan;
-import net.narutomod.item.ItemMangekyoSharingan;
-import net.narutomod.item.ItemDojutsu;
-import net.narutomod.item.ItemKunai;
-import net.narutomod.item.ItemKaton;
-import net.narutomod.item.ItemAkatsukiRobe;
 import net.narutomod.ModConfig;
 import net.narutomod.ElementsNarutomodMod;
 
@@ -112,9 +103,15 @@ public class EntityItachi extends ElementsNarutomodMod.ModElement {
 		private final double FIREBALL_CHAKRA = 50d;
 		private final double AMATERASU_CHAKRA = 50d;
 		private final double SUSANOO_CHAKRA = 300d;
-		private final double INVIS_CHAKRA = 20d;
+		private final double INVIS_CHAKRA = 100000d;
 		private static final int GENJUTSU_COOLDOWN = 100; // 5 seconds
 		private boolean isReal;
+		private boolean first_Susanno_Death = false;
+		private int stage;
+		private Item drop;
+		private Item msStack;
+		private Item tomoeStack;
+		private boolean dropEyes;
 		private int lookedAtTime;
 		private final int genjutsuDuration = 200;
 		private int lastGenjutsuTime;
@@ -133,18 +130,94 @@ public class EntityItachi extends ElementsNarutomodMod.ModElement {
 		@Override
 		public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 			ItemStack stack = new ItemStack(ItemMangekyoSharingan.helmet, 1);
-			((ItemDojutsu.Base)stack.getItem()).setOwner(stack, this);
-			this.setItemStackToSlot(EntityEquipmentSlot.HEAD, stack);
+			ItemStack tomoe = new ItemStack(ItemSharingan.helmet, 1);
+
+			this.setMsStack(ItemMangekyoSharingan.helmet);
+			this.setTomoeStack(ItemSharingan.helmet);
+
+			this.setEye(this.tomoeStack);
+
+			//this.setItemStackToSlot(EntityEquipmentSlot.HEAD, tomoe);
 			this.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ItemAkatsukiRobe.body, 1));
+			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ItemKunai.block, 1));
 			this.setItemToInventory(new ItemStack(ItemKunai.block), 0);
 			this.setItemToInventory(new ItemStack(ItemAkatsukiRobe.helmet), 1);
+
+			ItemStack konoha_rogue = new ItemStack(ItemNinjaArmorKonoha.helmet, 1);
+			if (!konoha_rogue.hasTagCompound()) {
+				konoha_rogue.setTagCompound(new NBTTagCompound());
+			}
+
+			konoha_rogue.getTagCompound().setBoolean("Rogue_Itachi", true);
+			this.setItemToInventory(konoha_rogue, 2);
+
 			this.setIsReal(this.rand.nextInt(ModConfig.ITACHI_REAL_CHANCE) == 0);
+
+			boolean canDrop = false;
+			if (Math.random() > 0.5) {
+				canDrop = true;
+			}
+			this.setDropEyesIfReal(canDrop);
+			this.setFirstSusDeath(false);
+			this.setDrop(stack.getItem());
+			this.setStage(1);
 			return super.onInitialSpawn(difficulty, livingdata);
+		}
+
+		public void setEye(Item stack) {
+			if (stack == null) { return; }
+			ItemStack eye = new ItemStack(stack, 1);
+			if (!eye.hasTagCompound()) {
+				eye.setTagCompound(new NBTTagCompound());
+			}
+			eye.getTagCompound().setString("MS", "Itachi");
+			((ItemDojutsu.Base)eye.getItem()).setOwner(eye, this);
+			this.setItemStackToSlot(EntityEquipmentSlot.HEAD, eye);
 		}
 
 		public void setIsReal(boolean real) {
 			this.isReal = real;
 		}
+
+		public void setFirstSusDeath(boolean died) { this.first_Susanno_Death = died;}
+
+		public void setDropEyesIfReal(boolean canDrop) { this.dropEyes = canDrop;}
+
+		public void setDrop(Item drop) {this.drop = drop;}
+
+		public void setMsStack(Item stack) {
+			NBTTagCompound tag = this.getEntityData();
+			tag.setInteger("MSStack", Item.getIdFromItem(stack));
+			this.msStack = stack;
+		}
+
+		public Item getMSStack() {
+			NBTTagCompound tag = this.getEntityData();
+
+			if (!tag.hasKey("MSStack")) {
+				return ItemStack.EMPTY.getItem();
+			}
+
+			int tomoeStackID = tag.getInteger("MSStack");
+			return Item.getItemById(tomoeStackID);
+		}
+
+		public void setTomoeStack(Item stack) {
+			NBTTagCompound tag = this.getEntityData();
+			tag.setInteger("TomoeStack", Item.getIdFromItem(stack));
+			this.tomoeStack = stack;
+		}
+		public Item getTomoeStack() {
+			NBTTagCompound tag = this.getEntityData();
+
+			if (!tag.hasKey("TomoeStack")) {
+				return ItemStack.EMPTY.getItem();
+			}
+
+			int tomoeStackID = tag.getInteger("TomoeStack");
+			return Item.getItemById(tomoeStackID);
+		}
+		public void setStage(int newStage) {this.stage = newStage;}
 
 		@Override
 		protected void initEntityAI() {
@@ -168,7 +241,8 @@ public class EntityItachi extends ElementsNarutomodMod.ModElement {
 				@Override
 				public boolean shouldExecute() {
 					return super.shouldExecute() && !EntityCustom.this.isRiding()
-							&& EntityCustom.this.getAttackTarget().getDistance(EntityCustom.this) <= 4d;
+							&& EntityCustom.this.getAttackTarget().getDistance(EntityCustom.this)
+							<= 4d;
 				}
 				/*@Override
 				protected double getAttackReachSqr(EntityLivingBase attackTarget) {
@@ -212,13 +286,12 @@ public class EntityItachi extends ElementsNarutomodMod.ModElement {
 		@Override
 		protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
 			this.entityDropItem(new ItemStack(ItemKunai.block, 1), 0.0f);
-			if (this.isReal) {
+			if (this.isReal && this.stage == 2) {
 				ItemStack stack = this.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-				if (stack.getItem() != ItemMangekyoSharingan.helmet) {
-					stack = this.getItemFromInventory(1);
-				}
-				if (stack.getItem() == ItemMangekyoSharingan.helmet) {
-				 	((ItemSharingan.Base)stack.getItem()).forceDamage(stack, this.rand.nextInt(stack.getMaxDamage()));
+
+				if (this.dropEyes) {
+					ItemStack _stack = new ItemStack(this.drop, 1);
+					((ItemSharingan.Base) this.drop).forceDamage(_stack, this.rand.nextInt(this.drop.getMaxDamage()));
 					this.entityDropItem(stack, 0.0f);
 				}
 			}
@@ -249,7 +322,7 @@ public class EntityItachi extends ElementsNarutomodMod.ModElement {
 				if (this.rand.nextInt(3) <= 1) {
 					this.setPositionAndUpdate(this.posX + (this.rand.nextDouble() - 0.5) * 2, this.posY, this.posZ + (this.rand.nextDouble() - 0.5) * 2);
 					ret = false;
-				} else if (this.isReal && this.getHealth() > 0 && this.getHealth() - amount <= this.getMaxHealth() / 3
+				} else if (this.stage > 1 && this.isReal && this.getHealth() > 0 && this.getHealth() - amount <= this.getMaxHealth() / 4
 						&& !this.isRiding() && this.ticksExisted > this.lastSusanooTime + 600 && this.getChakra() >= SUSANOO_CHAKRA) {
 					this.susanooEntity = new EntitySusanooClothed.EntityCustom(this, false);
 					this.susanooEntity.setLifeSpan(600);
@@ -257,6 +330,7 @@ public class EntityItachi extends ElementsNarutomodMod.ModElement {
 					this.startRiding(this.susanooEntity);
 					this.consumeChakra(SUSANOO_CHAKRA);
 					this.lastSusanooTime = this.ticksExisted;
+					this.susanooEntity.setDropItemsWhenDead(false);
 					this.susanooEntity.attackEntityFrom(source, amount);
 					ret = false;
 				} else if (this.ticksExisted > this.lastInvisTime + 200 && this.getChakra() >= INVIS_CHAKRA) {
@@ -284,7 +358,7 @@ public class EntityItachi extends ElementsNarutomodMod.ModElement {
 
 		@Override
 		protected void updateAITasks() {
-			super.updateAITasks();
+			//super.updateAITasks();
 			EntityLivingBase target = this.getAttackTarget();
 			if (target != null && target.isEntityAlive()) {
 				if (this.isSusanooActive()) {
@@ -312,9 +386,6 @@ public class EntityItachi extends ElementsNarutomodMod.ModElement {
 				}
 			} else if (this.peacefulTicks > 200) {
 				this.setAttackTarget(target = null);
-			}
-			if ((this.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == ItemAkatsukiRobe.helmet) != (target == null)) {
-				this.swapWithInventory(EntityEquipmentSlot.HEAD, 1);
 			}
 		}
 
@@ -346,7 +417,7 @@ public class EntityItachi extends ElementsNarutomodMod.ModElement {
 			if (this.getRidingEntity() instanceof EntitySusanooClothed.EntityCustom) {
 				((EntitySusanooClothed.EntityCustom)this.getRidingEntity()).attackEntityWithRangedAttack(target, distanceFactor);
 			} else {
-				if (chance == 0 && distanceFactor > 0.3333f && this.consumeChakra(AMATERASU_CHAKRA)) {
+				if (chance == 0 && this.stage > 1 && distanceFactor > 0.3333f && this.consumeChakra(AMATERASU_CHAKRA)) {
 					this.world.playSound(null, target.posX, target.posY, target.posZ, SoundEvent.REGISTRY
 							.getObject(new ResourceLocation("narutomod:sharingansfx")), SoundCategory.NEUTRAL, 1f, 1f);
 					target.addPotionEffect(new PotionEffect(PotionAmaterasuFlame.potion, 1200, 3, false, false));
@@ -398,6 +469,37 @@ public class EntityItachi extends ElementsNarutomodMod.ModElement {
 			super.onUpdate();
 			this.trackAttackedPlayers();
 			this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
+			ItemStack eyes = this.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+
+			if (this.world.isRemote) { return; }
+
+			if (this.msStack == null || this.tomoeStack == null) {
+				this.msStack = this.getMSStack();
+				this.tomoeStack = this.getTomoeStack();
+			}
+			if (this.stage == 1 && this.isReal) {
+				if ( (this.getHealth() / this.getMaxHealth()) <= 0.50) {
+					this.setStage(2);
+					this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue((double) this.getMaxHealth() * 3);
+					this.setHealth(this.getMaxHealth());
+
+					Vec3d pos = this.getPositionVector();
+					this.world.playSound((EntityPlayer) null, pos.x, pos.y, pos.z, (net.minecraft.util.SoundEvent) net.minecraft.util.SoundEvent.REGISTRY
+							.getObject(new ResourceLocation("narutomod:sharingansfx")), SoundCategory.NEUTRAL, (float) 1, (float) 1);
+
+					this.setEye(this.msStack);
+				} else {
+					if (!eyes.getItem().equals(this.tomoeStack)) {
+						this.setEye(this.tomoeStack);
+					}
+				}
+			} else {
+				if (this.isReal) {
+					if (!eyes.getItem().equals(this.msStack)) {
+						this.setEye(this.msStack);
+					}
+				}
+			}
 		}
 
 		@Override
@@ -409,19 +511,31 @@ public class EntityItachi extends ElementsNarutomodMod.ModElement {
 		public void writeEntityToNBT(NBTTagCompound compound) {
 			super.writeEntityToNBT(compound);
 			compound.setBoolean("isReal", this.isReal);
+			compound.setInteger("stage", this.stage);
 		}
 
 		@Override
 		public void readEntityFromNBT(NBTTagCompound compound) {
 			super.readEntityFromNBT(compound);
 			this.setIsReal(compound.getBoolean("isReal"));
+			this.setStage(compound.getInteger("stage"));
 		}
 	}
 
 	public static class Entity4MobAppearance extends EntityCustom {
 		public Entity4MobAppearance(World worldIn) {
 			super(worldIn);
-			this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ItemMangekyoSharingan.helmet));
+
+			ItemStack ms = new ItemStack(ItemMangekyoSharingan.helmet, 1);
+			if (!ms.hasTagCompound()) {
+				ms.setTagCompound(new NBTTagCompound());
+			}
+
+			ms.getTagCompound().setString("MS", "Itachi");
+
+			this.setItemStackToSlot(EntityEquipmentSlot.HEAD, ms);
+			//this.setItemToInventory(new ItemStack(ItemNinjaArmorKonoha.helmet, 1), 1);
+			//this.setItemToInventory(new ItemStack(ItemAkatsukiRobe.helmet, 1), 2);
 		}
 	}
 
@@ -441,7 +555,7 @@ public class EntityItachi extends ElementsNarutomodMod.ModElement {
 
 		@SideOnly(Side.CLIENT)
 		public class RenderCustom extends EntityNinjaMob.RenderBase<EntityCustom> {
-			private final ResourceLocation texture = new ResourceLocation("narutomod:textures/itachi.png");
+			private final ResourceLocation texture = new ResourceLocation("narutomod:textures/anbu_itachi.png");
 
 			public RenderCustom(RenderManager renderManagerIn, ModelBiped modelIn) {
 				super(renderManagerIn, modelIn);

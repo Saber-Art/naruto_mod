@@ -156,9 +156,15 @@ public class ItemJutsu extends ElementsNarutomodMod.ModElement {
 		protected boolean executeJutsu(ItemStack stack, EntityLivingBase entity, float power) {
 			JutsuEnum jutsuEnum = this.getCurrentJutsu(stack);
 			Chakra.Pathway pw = Chakra.pathway(entity);
+			NBTTagCompound tag = entity.getEntityData();
 			double d = jutsuEnum.chakraUsage * power;
 			if (power <= 0f || pw.getAmount() < d) {
 				return false;
+			}
+			if (tag.hasKey("JutsuBan")) {
+				if (tag.getBoolean("JutsuBan")) {
+					return false;
+				}
 			}
 			if (jutsuEnum.jutsu.createJutsu(stack, entity, power)) {
 				//this.addCurrentJutsuXp(stack, (int)power);
@@ -407,26 +413,78 @@ public class ItemJutsu extends ElementsNarutomodMod.ModElement {
 		}
 
 		protected JutsuEnum getCurrentJutsu(ItemStack stack) {
+			//stack.getTagCompound().setInteger(JUTSU_INDEX_KEY, 0);
 			return this.jutsuList.get(this.getCurrentJutsuIndex(stack));
 		}
 	
 		private void setNextJutsu(ItemStack stack, EntityLivingBase entity) {
 			if (!stack.hasTagCompound())
 				stack.setTagCompound(new NBTTagCompound());
+
+			int jutsuSize = this.jutsuList.size();
 			int i = 0;
 			int next = this.getCurrentJutsuIndex(stack);
-			for ( ; i < this.jutsuList.size(); i++) {
-				++next;
-				if (next >= this.jutsuList.size())
+			for ( ; i < jutsuSize; i++) {
+				next = next + 1;
+				if (next >= jutsuSize) {
 					next = 0;
-				if (this.canUseJutsu(stack, next, entity))
+				}
+				if (this.canUseJutsu(stack, next, entity)) {
 					break;
+				}
 			}
-			if (i < this.jutsuList.size()) {
+
+			if (next < jutsuSize && next >= 0) {
 				stack.getTagCompound().setInteger(JUTSU_INDEX_KEY, next);
-				if (entity instanceof EntityPlayer && !entity.world.isRemote)
+				if (entity instanceof EntityPlayer && !entity.world.isRemote) {
 					((EntityPlayer) entity).sendStatusMessage(new TextComponentString(this.jutsuList.get(next).getName()), true);
+				}
 			}
+		}
+
+		private void setPrevJutsu(ItemStack stack, EntityLivingBase entity) {
+			if (!stack.hasTagCompound())
+				stack.setTagCompound(new NBTTagCompound());
+
+			int jutsuSize = this.jutsuList.size();
+			int i = 0;
+			int prev = this.getCurrentJutsuIndex(stack);
+			for ( ; i < jutsuSize; i++) {
+				prev = prev - 1;
+				if (prev < 0) {
+					prev = jutsuSize - 1;
+				}
+				if (this.canUseJutsu(stack, prev, entity)) {
+					break;
+				}
+			}
+
+			if (prev < jutsuSize && prev >= 0) {
+				stack.getTagCompound().setInteger(JUTSU_INDEX_KEY, prev);
+				if (entity instanceof EntityPlayer && !entity.world.isRemote) {
+					((EntityPlayer) entity).sendStatusMessage(new TextComponentString(this.jutsuList.get(prev).getName()), true);
+				}
+			}
+
+			/*
+			int i = this.jutsuList.size();
+			int prev = this.getCurrentJutsuIndex(stack);
+			for ( ; i > 0; i--) {
+				--prev;
+				if (prev <= 0) {
+					prev = this.jutsuList.size();
+				}
+				if (this.canUseJutsu(stack, prev, entity)) {
+					break;
+				}
+			}
+			if (i > this.jutsuList.size()) {
+				stack.getTagCompound().setInteger(JUTSU_INDEX_KEY, prev);
+				if (entity instanceof EntityPlayer && !entity.world.isRemote) {
+					((EntityPlayer) entity).sendStatusMessage(new TextComponentString(this.jutsuList.get(prev).getName()), true);
+				}
+			}
+			*/
 		}
 
 		public void setIsAffinity(ItemStack stack, boolean b) {
@@ -514,6 +572,12 @@ public class ItemJutsu extends ElementsNarutomodMod.ModElement {
 		public static void switchNextJutsu(ItemStack stack, EntityLivingBase entity) {
 			if (stack.getItem() instanceof Base) {
 				((Base)stack.getItem()).setNextJutsu(stack, entity);
+			}
+		}
+
+		public static void switchPrevJutsu(ItemStack stack, EntityLivingBase entity) {
+			if (stack.getItem() instanceof Base) {
+				((Base) stack.getItem()).setPrevJutsu(stack, entity);
 			}
 		}
 

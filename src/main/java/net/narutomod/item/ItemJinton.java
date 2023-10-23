@@ -251,7 +251,7 @@ public class ItemJinton extends ElementsNarutomodMod.ModElement {
 		if (target instanceof EntityLivingBase) {
 			target.hurtResistantTime = 10;
 			target.attackEntityFrom(ItemJutsu.causeJutsuDamage(projectile, attacker)
-			  .setDamageBypassesArmor().setDamageIsAbsolute(), amount);
+			  .setDamageBypassesArmor().setDamageIsAbsolute(), amount * 0.25f);
 		} else {
 			target.onKillCommand();
 		}
@@ -316,7 +316,7 @@ public class ItemJinton extends ElementsNarutomodMod.ModElement {
 				double d = ProcedureUtils.BB.getVolume(bb.intersect(entity.getEntityBoundingBox()))
 				 / ProcedureUtils.BB.getVolume(entity.getEntityBoundingBox()) * 0.5D;
 				attackEntityWithJutsu(this, this.shootingEntity, entity, 
-				 entity instanceof EntityLivingBase ? ((EntityLivingBase)entity).getMaxHealth() * (float)d : Float.MAX_VALUE);
+				 entity instanceof EntityLivingBase ? ((EntityLivingBase)entity).getMaxHealth() * (float)0.1f : Float.MAX_VALUE);
 			}
 		}
 
