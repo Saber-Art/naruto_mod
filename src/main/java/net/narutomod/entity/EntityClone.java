@@ -7,7 +7,8 @@ import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -790,6 +791,8 @@ public class EntityClone extends ElementsNarutomodMod.ModElement {
 		@SideOnly(Side.CLIENT)
 		public class LayerInventoryItem implements net.minecraft.client.renderer.entity.layers.LayerRenderer<_Base> {
 			private final RenderClone renderer;
+
+			private final Map<String, ResourceLocation> ARMOR_TEXTURE_RES_MAP = Maps.<String, ResourceLocation>newHashMap();
 	
 			public LayerInventoryItem(RenderClone rendererIn) {
 				this.renderer = rendererIn;
@@ -808,7 +811,7 @@ public class EntityClone extends ElementsNarutomodMod.ModElement {
 								this.renderSkinLayer(stack, entityIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
 							}
 							if (item.showOnBody() != ItemOnBody.BodyPart.NONE && !entityIn.getHeldItemMainhand().isItemEqualIgnoreDurability(stack)) {
-								this.renderItemOnBody(stack, entityIn, item.showOnBody());
+								this.renderItemOnBody(stack, entityIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
 							}
 						}
 					}
@@ -826,8 +829,53 @@ public class EntityClone extends ElementsNarutomodMod.ModElement {
 					}
 				}
 			}
-	
-			private void renderItemOnBody(ItemStack stack, _Base entityIn, ItemOnBody.BodyPart bodypart) {
+
+			private void renderItemOnBody(ItemStack stack, EntityLivingBase entityIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+				Vec3d offset = ((ItemOnBody.Interface)stack.getItem()).getOffset();
+				ItemOnBody.BodyPart bodypart = ((ItemOnBody.Interface)stack.getItem()).showOnBody();
+				GlStateManager.pushMatrix();
+				ModelBiped model = (ModelBiped) this.renderer.getMainModel();
+				//model.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
+				if (entityIn.isSneaking()) {
+					GlStateManager.translate(0.0F, 0.2F, 0.0F);
+				}
+				switch (bodypart) {
+					case HEAD:
+						model.bipedHead.postRender(0.0625F);
+						break;
+					case TORSO:
+						model.bipedBody.postRender(0.0625F);
+						break;
+					case RIGHT_ARM:
+						model.bipedRightArm.postRender(0.0625F);
+						break;
+					case LEFT_ARM:
+						model.bipedLeftArm.postRender(0.0625F);
+						break;
+					case RIGHT_LEG:
+						model.bipedRightLeg.postRender(0.0625F);
+						break;
+					case LEFT_LEG:
+						model.bipedLeftLeg.postRender(0.0625F);
+						break;
+				}
+				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+				GlStateManager.translate(offset.x, -0.25F + offset.y, offset.z);
+				GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+				GlStateManager.scale(0.625F, -0.625F, -0.625F);
+
+				ItemStack stackToRender = ((ItemOnBody.Interface)stack.getItem()).getRenderStack();
+				if (stackToRender == null) {
+					stackToRender = stack;
+				}
+
+				if (((ItemOnBody.Interface)stack.getItem()).canRender()) {
+					Minecraft.getMinecraft().getItemRenderer().renderItem(entityIn, stackToRender, ItemCameraTransforms.TransformType.HEAD);
+				}
+				GlStateManager.popMatrix();
+			}
+
+			private void renderItemOnBody_2(ItemStack stack, _Base entityIn, ItemOnBody.BodyPart bodypart) {
 				Vec3d offset = ((ItemOnBody.Interface)stack.getItem()).getOffset();
 				GlStateManager.pushMatrix();
 				ModelBiped model = (ModelBiped)this.renderer.getMainModel();

@@ -418,10 +418,12 @@ public class ProcedureOnPlayerPostTick extends ElementsNarutomodMod.ModElement {
 			if (ItemDojutsu.hasAnyDojutsu((EntityPlayer) entity)) {
 				if ((!ProcedureUtils.isWearingMangekyo((EntityPlayer) entity) && (entity.getEntityData().getBoolean("susanoo_activated")))) {
 					{
-						Map<String, Object> $_dependencies = new HashMap<>();
-						$_dependencies.put("entity", entity);
-						$_dependencies.put("world", world);
-						ProcedureSusanoo.executeProcedure($_dependencies);
+						if (!ProcedureUtils.isWearingMangekyo((EntityPlayer) entity) && !entity.getEntityData().getBoolean("susanoo_override")) {
+							Map<String, Object> $_dependencies = new HashMap<>();
+							$_dependencies.put("entity", entity);
+							$_dependencies.put("world", world);
+							ProcedureSusanoo.executeProcedure($_dependencies);
+						}
 					}
 				}
 				if (ItemSharingan.isBlinded((EntityPlayer) entity)) {

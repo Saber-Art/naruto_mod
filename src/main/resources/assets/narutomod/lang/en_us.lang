@@ -548,6 +548,7 @@ advancements.bakuton_acquired.descr=Explosion Release is a nature transformation
 entity.toad_summon.name=Toad summon
 death.attack.senjutsu_damage=%1$s was killed by %2$s using senjutsu
 advancements.tensei_byakugan_activated.title=RinneSharingan Activated
+item.halloween_bucket.name=Halloween Bucket
 item.military_rations_pill_gold.name=Military Rations Pill - Gold
 item.byakurinnesharinganbody.name=
 entity.kirin.name=Kirin

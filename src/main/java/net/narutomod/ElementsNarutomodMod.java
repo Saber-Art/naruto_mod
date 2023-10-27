@@ -52,6 +52,7 @@ import net.narutomod.gui.GuiScrollCellularActivationGui;
 import net.narutomod.gui.GuiScrollBodyReplacementGui;
 import net.narutomod.gui.GuiScrollBigBlowGui;
 import net.narutomod.gui.GuiMedicalScrollGUI;
+import net.narutomod.gui.GuiBucketStorage;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.common.registry.EntityEntry;
@@ -451,6 +452,8 @@ public class ElementsNarutomodMod implements IFuelHandler, IWorldGenerator {
 				return new GuiScrollSealingChainsGui.GuiContainerMod(world, x, y, z, player);
 			if (id == GuiScrollHiraishinGui.GUIID)
 				return new GuiScrollHiraishinGui.GuiContainerMod(world, x, y, z, player);
+			if (id == GuiBucketStorage.GUIID)
+				return new GuiBucketStorage.GuiContainerMod(world, x, y, z, player);
 			return null;
 		}
 
@@ -548,6 +551,8 @@ public class ElementsNarutomodMod implements IFuelHandler, IWorldGenerator {
 				return new GuiScrollSealingChainsGui.GuiWindow(world, x, y, z, player);
 			if (id == GuiScrollHiraishinGui.GUIID)
 				return new GuiScrollHiraishinGui.GuiWindow(world, x, y, z, player);
+			if (id == GuiBucketStorage.GUIID)
+				return new GuiBucketStorage.GuiWindow(world, x, y, z, player);
 			return null;
 		}
 	}

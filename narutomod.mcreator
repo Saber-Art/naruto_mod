@@ -2,7 +2,7 @@
   "id_map": {
     "ENTITY": 431,
     "DIMENSION": 13,
-    "GUI": 64
+    "GUI": 65
   },
   "mod_elements": [
     {
@@ -7256,6 +7256,26 @@
       "metadata": {
         "dependencies": []
       }
+    },
+    {
+      "name": "BucketStorage",
+      "type": "gui",
+      "sortid": 863,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {
+        "0": 65
+      },
+      "registry_name": "bucket_storage"
+    },
+    {
+      "name": "HalloweenBucket",
+      "type": "item",
+      "sortid": 863,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "halloween_bucket"
     }
   ],
   "variable_elements": [
@@ -8770,6 +8790,7 @@
       "entity.toad_summon.name": "Toad summon",
       "death.attack.senjutsu_damage": "%1$s was killed by %2$s using senjutsu",
       "advancements.tensei_byakugan_activated.title": "RinneSharingan Activated",
+      "item.halloween_bucket.name": "Halloween Bucket",
       "item.military_rations_pill_gold.name": "Military Rations Pill - Gold",
       "item.byakurinnesharinganbody.name": "",
       "entity.kirin.name": "Kirin",
