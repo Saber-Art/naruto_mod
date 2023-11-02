@@ -1,5 +1,6 @@
 package net.narutomod.procedure;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.narutomod.potion.PotionAmaterasuFlame;
 import net.narutomod.item.ItemMangekyoSharinganEternal;
 import net.narutomod.item.ItemMangekyoSharingan;
@@ -41,6 +42,22 @@ public class ProcedureAmaterasuFlameOnPotionActiveTick extends ElementsNarutomod
 			((EntityLivingBase) entity).removePotionEffect(PotionAmaterasuFlame.potion);
 			(entity).extinguish();
 		} else {
+			if (entity instanceof EntityPlayer) {
+				ItemStack helmet = ((EntityPlayer) entity).inventory.armorInventory.get(3);
+				if (helmet != ItemStack.EMPTY) {
+					if (helmet.hasTagCompound()) {
+						NBTTagCompound tag = helmet.getTagCompound();
+						if (tag.hasKey("MS")) {
+							if (tag.getString("MS").equalsIgnoreCase("sasuke")) {
+								((EntityLivingBase) entity).removePotionEffect(PotionAmaterasuFlame.potion);
+								(entity).extinguish();
+								return;
+							}
+						}
+					}
+ 				}
+			}
+
 			amp = (double) (amplifier);
 			entity.attackEntityFrom(ProcedureUtils.AMATERASU, (float) (amp + 1));
 			w = entity.width / 2;

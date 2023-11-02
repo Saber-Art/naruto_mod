@@ -1,0 +1,181 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.pumpkin_jack.idle": {
+			"loop": true,
+			"animation_length": 1,
+			"bones": {
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 2.5]
+						},
+						"1.0": {
+							"vector": [0, 0, 2.5]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [0, 0.25, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, -2.5]
+						},
+						"1.0": {
+							"vector": [0, 0, -2.5]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [0, 0.25, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"RightLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 2.5]
+						},
+						"1.0": {
+							"vector": [0, 0, 2.5]
+						}
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, -2.5]
+						},
+						"1.0": {
+							"vector": [0, 0, -2.5]
+						}
+					}
+				},
+				"Flying_Pumpkin": {
+					"scale": {
+						"0.0": {
+							"vector": [0.001, 0.001, 0.001]
+						},
+						"0.0417": {
+							"vector": [0.001, 0.001, 0.001]
+						},
+						"1.0": {
+							"vector": [0.001, 0.001, 0.001]
+						}
+					}
+				},
+				"Pumpkin_Hand": {
+					"scale": {
+						"0.0": {
+							"vector": [0.001, 0.001, 0.001]
+						},
+						"0.0417": {
+							"vector": [0.001, 0.001, 0.001]
+						},
+						"1.0": {
+							"vector": [0.001, 0.001, 0.001]
+						}
+					}
+				},
+				"Pumpkin": {
+					"position": {
+						"0.0": {
+							"vector": [0, -5, 0]
+						},
+						"0.0417": {
+							"vector": [0, -5, 0]
+						},
+						"1.0": {
+							"vector": [0, -5, 0]
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [0.001, 0.001, 0.001]
+						},
+						"0.0417": {
+							"vector": [0.001, 0.001, 0.001]
+						},
+						"1.0": {
+							"vector": [0.001, 0.001, 0.001]
+						}
+					}
+				}
+			}
+		},
+		"animation.pumpkin_jack.move": {
+			"animation_length": 1,
+			"override_previous_animation": true,
+			"bones": {
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [52.5, 0, 0]
+						},
+						"0.5": {
+							"vector": [-52.5, 0, 0]
+						},
+						"1.0": {
+							"vector": [52.5, 0, 0]
+						}
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [-60, 0, 0]
+						},
+						"0.5": {
+							"vector": [67.5, 0, 0]
+						},
+						"1.0": {
+							"vector": [-60, 0, 0]
+						}
+					}
+				},
+				"RightLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [40, 0, 0]
+						},
+						"0.5": {
+							"vector": [-37.5, 0, 0]
+						},
+						"1.0": {
+							"vector": [40, 0, 0]
+						}
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [-35, 0, 0]
+						},
+						"0.5": {
+							"vector": [40, 0, 0]
+						},
+						"1.0": {
+							"vector": [-35, 0, 0]
+						}
+					}
+				}
+			}
+		}
+	}
+}

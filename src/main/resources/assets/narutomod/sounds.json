@@ -1033,5 +1033,25 @@
         "stream": false
       }
     ]
+  },
+  "wood-dragon": {
+    "category": "master",
+    "subtitle": "subtitles.wood-dragon",
+    "sounds": [
+      {
+        "name": "narutomod:wood-dragon",
+        "stream": false
+      }
+    ]
+  },
+  "pumpkin-roar": {
+    "category": "master",
+    "subtitle": "subtitles.pumpkin-roar",
+    "sounds": [
+      {
+        "name": "narutomod:pumpkinroar",
+        "stream": false
+      }
+    ]
   }
 }

@@ -44,6 +44,9 @@ public class ModConfig extends ElementsNarutomodMod.ModElement {
 	@Config.Comment("Amaterasu flame on block duration (reference: vanilla fire is 3)")
 	public static int AMATERASU_BLOCK_DURATION = 100;
 
+	@Config.Comment("Halloween Boss's spawn weight (0~200). 0 to stop spawning.")
+	public static int SPAWN_WEIGHT_JACK = 2;
+
 	public ModConfig(ElementsNarutomodMod instance) {
 		super(instance, 837);
 	}

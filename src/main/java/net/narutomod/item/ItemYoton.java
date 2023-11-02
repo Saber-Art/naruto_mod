@@ -53,13 +53,17 @@ public class ItemYoton extends ElementsNarutomodMod.ModElement {
 	public static final ItemJutsu.JutsuEnum SEALING9D = new ItemJutsu.JutsuEnum(3, "tooltip.phantom9sealing.name", 'S', 100d, new EntityGedoStatue.Sealing9Jutsu());
 	public static final ItemJutsu.JutsuEnum SEALING10 = new ItemJutsu.JutsuEnum(4, "tooltip.10coffinseal.name", 'S', 100d, new EntityTenTails.CoffinSealJutsu());
 
+	public static final ItemJutsu.JutsuEnum RINNESEP = new ItemJutsu.JutsuEnum(5, "tooltip.pathseperation.name", 'S', 350d, new EntityTenTails.CoffinSealJutsu());
+	public static final ItemJutsu.JutsuEnum RINNEMERGE = new ItemJutsu.JutsuEnum(6, "tooltip.pathmerge.name", 'S', 350d, new EntityTenTails.CoffinSealJutsu());
+
+
 	public ItemYoton(ElementsNarutomodMod instance) {
 		super(instance, 406);
 	}
 
 	@Override
 	public void initElements() {
-		elements.items.add(() -> new RangedItem(MULTISIZE, FUUIN, SEALINGCHAIN, SEALING9D, SEALING10));
+		elements.items.add(() -> new RangedItem(MULTISIZE, FUUIN, SEALINGCHAIN, SEALING9D, SEALING10, RINNESEP, RINNEMERGE));
 		elements.entities.add(() -> EntityEntryBuilder.create().entity(EntityBiggerMe.class)
 				.id(new ResourceLocation("narutomod", "biggerme"), ENTITYID).name("biggerme").tracker(64, 1, true).build());
 	}

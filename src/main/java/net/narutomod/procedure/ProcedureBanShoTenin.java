@@ -1,6 +1,8 @@
 package net.narutomod.procedure;
 
 import net.minecraft.util.text.TextComponentTranslation;
+import net.narutomod.entity.EntityHarvestScytheThrown;
+import net.narutomod.entity.EntityPumpkinJack;
 import org.lwjgl.input.Mouse;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -53,6 +55,11 @@ public class ProcedureBanShoTenin extends ElementsNarutomodMod.ModElement {
 		int cooldown = entity.getEntityData().getInteger(BSTN_CD);
 		if ((int)entity.world.getTotalWorldTime() > cooldown) {
 			RayTraceResult t = ProcedureUtils.objectEntityLookingAt(entity, 50d);
+
+			if (t.entityHit instanceof EntityPumpkinJack.EntityCustom || t.entityHit instanceof EntityHarvestScytheThrown.EntityArrowCustom) {
+				return;
+			}
+
 			Entity grabbedEntity = null;
 			ProcedurePullAndHold procedure = map.get(entity);
 			if (procedure == null) {

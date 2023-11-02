@@ -1,0 +1,60 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "narutomod:weapons/harvest_scythe/pumpkin_jack_scythe.obj",
+    "custom": {
+      "flip-v": true
+    },
+    "textures": {
+      "#scythe": "narutomod:blocks/weapons/pumpkinjack_scythe_poison"
+    }
+  },
+  "variants": {
+    "inventory": [
+      {
+        "transform": {
+          "firstperson_lefthand": {
+            "translation": [-0.2,0,-0.1],
+            "rotation": [ {"y": -90},{"x": 0},{"z": 0} ],
+            "scale": 0.4
+          },
+          "firstperson_righthand": {
+            "translation": [0.2,0,-0.1],
+            "rotation": [ {"y": 90},{"x": 0},{"z": 0} ],
+            "scale": 0.4
+          },
+          "thirdperson_lefthand": {
+            "translation": [-0.25,0.1,-0.25],
+            "rotation": [ {"y": -90},{"x": 0},{"z": 0} ],
+            "scale": 0.5
+          },
+          "thirdperson_righthand": {
+            "translation": [0.25,0.1,-0.25],
+            "rotation": [ {"y": 90},{"x": 0},{"z": 0} ],
+            "scale": 0.5
+          },
+          "gui": {
+            "translation": [0,0,0.1],
+            "rotation": [ {"y": 0},{"x": 0},{"z": -45} ],
+            "scale": 0.35
+          },
+          "ground": {
+            "translation": [0,0,0.1],
+            "rotation": [ {"y": 90},{"x": 90},{"z": 90} ],
+            "scale": 0.65
+          },
+          "head": {
+            "translation": [0,-0.5,0.9],
+            "rotation": [ {"y":0},{"x": 0}, {"z": 135} ],
+            "scale": 1
+          },
+          "fixed": {
+            "rotation": [0, 0, 0],
+            "translation": [0.5, 0.6, 0.5],
+            "scale": [1, 1, 1]
+          }
+        }
+      }
+    ]
+  }
+}

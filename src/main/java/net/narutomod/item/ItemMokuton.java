@@ -46,10 +46,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 
-import net.narutomod.entity.EntityWoodBurial;
-import net.narutomod.entity.EntityWoodPrison;
-import net.narutomod.entity.EntityWoodGolem;
-import net.narutomod.entity.EntityWoodArm;
+import net.narutomod.entity.*;
 import net.narutomod.procedure.ProcedureUtils;
 import net.narutomod.procedure.ProcedureSync;
 import net.narutomod.creativetab.TabModTab;
@@ -70,13 +67,15 @@ public class ItemMokuton extends ElementsNarutomodMod.ModElement {
 	public static final ItemJutsu.JutsuEnum WOODHOUSE = new ItemJutsu.JutsuEnum(2, "tooltip.mokuton.rightclick2", 'S', 100d, new JutsuHouse());
 	public static final ItemJutsu.JutsuEnum GOLEM = new ItemJutsu.JutsuEnum(3, "wood_golem", 'S', 2500, 4000d, new EntityWoodGolem.EC.Jutsu());
 	public static final ItemJutsu.JutsuEnum ARMATTACK = new ItemJutsu.JutsuEnum(4, "wood_arm", 'S', 400, 50d, new EntityWoodArm.EC.Jutsu());
-	
+
+	public static final ItemJutsu.JutsuEnum WOODDRAGON = new ItemJutsu.JutsuEnum(5, "wood_dragon", 'S', 750, 350d, new EntityWoodDragon.EC.Jutsu());
+
 	public ItemMokuton(ElementsNarutomodMod instance) {
 		super(instance, 245);
 	}
 
 	public void initElements() {
-		this.elements.items.add(() -> new ItemCustom(WOODBURIAL, WOODPRISON, WOODHOUSE, GOLEM, ARMATTACK));
+		this.elements.items.add(() -> new ItemCustom(WOODBURIAL, WOODPRISON, WOODHOUSE, GOLEM, ARMATTACK, WOODDRAGON));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -95,12 +94,16 @@ public class ItemMokuton extends ElementsNarutomodMod.ModElement {
 			this.defaultCooldownMap[WOODHOUSE.index] = 0;
 			this.defaultCooldownMap[GOLEM.index] = 0;
 			this.defaultCooldownMap[ARMATTACK.index] = 0;
+			this.defaultCooldownMap[WOODDRAGON.index] = 0;
 		}
 
 		@Override
 		protected float getPower(ItemStack stack, EntityLivingBase entity, int timeLeft) {
-			if (this.getCurrentJutsu(stack) == WOODPRISON) {
+			ItemJutsu.JutsuEnum jutsu = this.getCurrentJutsu(stack);
+			if (jutsu == WOODPRISON) {
 				return this.getPower(stack, entity, timeLeft, 1f, 50f);
+			} else if (jutsu == WOODDRAGON) {
+				return this.getPower(stack, entity, timeLeft, 0.1f, 2000f);
 			}
 			return 1f;
 		}
@@ -109,6 +112,11 @@ public class ItemMokuton extends ElementsNarutomodMod.ModElement {
 		protected float getMaxPower(ItemStack stack, EntityLivingBase entity) {
 			float ret = super.getMaxPower(stack, entity);
 			ItemJutsu.JutsuEnum jutsu = this.getCurrentJutsu(stack);
+
+			if (jutsu == WOODDRAGON) {
+				return Math.min(ret, 5f);
+			}
+
 			return jutsu == WOODPRISON ? Math.min(ret, 40f) : ret;
 		}
 

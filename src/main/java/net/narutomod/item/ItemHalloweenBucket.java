@@ -3,22 +3,32 @@ package net.narutomod.item;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkSystem;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.*;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
+import net.minecraftforge.event.entity.player.PlayerContainerEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.internal.NetworkModHolder;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.narutomod.NarutomodMod;
 import net.narutomod.creativetab.TabModTab;
@@ -39,6 +49,7 @@ import net.narutomod.gui.GuiScrollSwampPitGui;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.concurrent.Callable;
 
 @ElementsNarutomodMod.ModElement.Tag
 public class ItemHalloweenBucket extends ElementsNarutomodMod.ModElement {
@@ -51,16 +62,26 @@ public class ItemHalloweenBucket extends ElementsNarutomodMod.ModElement {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onItemDropped(ItemTossEvent event) {
-		if (event.getEntityItem().getItem().getItem() == block) {
-			if (Minecraft.getMinecraft().currentScreen instanceof GuiBucketStorage.GuiWindow) {
-				Minecraft.getMinecraft().player.closeScreen();
+		if (Minecraft.getMinecraft().currentScreen instanceof GuiBucketStorage.GuiWindow) {
+			if (event.getEntityItem().getItem().getItem() == new ItemStack(ItemHalloweenBucket.block, 1).getItem()) {
+				event.setCanceled(true);
 			}
 		}
 	}
 
 	@Override
+	public void preInit(FMLPreInitializationEvent event) {
+		registerCapabilities();
+	}
+
+	@Override
 	public void initElements() {
+		//MinecraftForge.EVENT_BUS.register(this);
 		elements.items.add(() -> new ItemCustom());
+	}
+
+	private void registerCapabilities() {
+
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -68,13 +89,17 @@ public class ItemHalloweenBucket extends ElementsNarutomodMod.ModElement {
 	public void registerModels(ModelRegistryEvent event) {
 		ModelLoader.setCustomModelResourceLocation(block, 0, new ModelResourceLocation("narutomod:halloween_bucket", "inventory"));
 	}
-	public static class ItemCustom extends Item {
+
+	public static class ItemCustom extends Item implements ItemOnBody.Interface {
+
+		private ItemStackHandler inv;
 		public ItemCustom() {
 			setMaxDamage(0);
 			maxStackSize = 1;
 			setUnlocalizedName("halloween_bucket");
 			setRegistryName("halloween_bucket");
 			setCreativeTab(TabModTab.tab);
+			this.inv = new ItemStackHandler(18);
 		}
 
 		@Override
@@ -107,96 +132,44 @@ public class ItemHalloweenBucket extends ElementsNarutomodMod.ModElement {
 			return ar;
 		}
 
-		@Override
-		public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound compound) {
-			return new InventoryCapability();
-		}
-
-		@Override
-		public NBTTagCompound getNBTShareTag(ItemStack stack) {
-			NBTTagCompound nbt = super.getNBTShareTag(stack);
-			if (nbt == null) {
-				nbt = new NBTTagCompound();
+		public ItemStackHandler getInv(ItemStack stack) {
+			if (!stack.hasTagCompound()) {
+				stack.setTagCompound(new NBTTagCompound());
 			}
 
-			if (stack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
-				ItemStackHandler capability = (ItemStackHandler) stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-				nbt.setTag("Inventory", capability.serializeNBT());
+			ItemStackHandler inv = new ItemStackHandler(18);
+
+			NBTTagCompound tag = stack.getTagCompound();
+			if (!tag.hasKey("Inventory")) {
+				tag.setTag("Inventory", inv.serializeNBT());
 			}
 
-			return nbt;
+			inv.deserializeNBT(tag.getCompoundTag("Inventory"));
+
+			return inv;
 		}
 
-		@Override
-		public void readNBTShareTag(ItemStack stack, @Nullable NBTTagCompound nbt) {
-			super.readNBTShareTag(stack, nbt);
-
-			if (nbt != null && stack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
-				ItemStackHandler capability = (ItemStackHandler) stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-				capability.deserializeNBT(nbt.getCompoundTag("Inventory"));
+		public void setInv(ItemStack stack, ItemStackHandler inv) {
+			if (!stack.hasTagCompound()) {
+				stack.setTagCompound(new NBTTagCompound());
 			}
-		}
-	}
 
-	private static class InventoryCapability implements ICapabilitySerializable<NBTTagCompound> {
-		@CapabilityInject(ItemStackHandler.class)
-		public static final Capability<ItemStackHandler> INVENTORY_CAPABILITY = null;
-
-		private final ItemStackHandler inventory = createItemHandler();
-
-		@Override
-		public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-			return capability == INVENTORY_CAPABILITY;
-		}
-
-		@Nullable
-		@Override
-		public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-			if (capability == INVENTORY_CAPABILITY) {
-				return INVENTORY_CAPABILITY.cast(this.inventory);
-			}
-			return null;
+			NBTTagCompound tag = stack.getTagCompound();
+			assert tag != null;
+			tag.setTag("Inventory", inv.serializeNBT());
 		}
 
 		@Override
-		public NBTTagCompound serializeNBT() {
-			return this.inventory.serializeNBT();
+		public boolean showSkinLayer() { return true; }
+		@Override
+		public ItemOnBody.BodyPart showOnBody() {
+			return ItemOnBody.BodyPart.RIGHT_LEG;
 		}
 
 		@Override
-		public void deserializeNBT(NBTTagCompound nbt) {
-			this.inventory.deserializeNBT(nbt);
-		}
+		public ItemStack getRenderStack() { return null; }
 
-		private ItemStackHandler createItemHandler() {
-			return new ItemStackHandler(18) {
-				@Override
-				public int getSlotLimit(int slot) {
-					return 64;
-				}
-
-				@Override
-				public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-					// Replace 'block' with the actual block you are checking against
-					return stack.getItem() != Item.getItemFromBlock(Blocks.STONE);
-				}
-			};
-		}
-
-		// Register the capability
-		public static void register() {
-			CapabilityManager.INSTANCE.register(ItemStackHandler.class, new Capability.IStorage<ItemStackHandler>() {
-				@Nullable
-				@Override
-				public NBTBase writeNBT(Capability<ItemStackHandler> capability, ItemStackHandler instance, EnumFacing side) {
-					return instance.serializeNBT();
-				}
-
-				@Override
-				public void readNBT(Capability<ItemStackHandler> capability, ItemStackHandler instance, EnumFacing side, NBTBase nbt) {
-					instance.deserializeNBT((NBTTagCompound) nbt);
-				}
-			}, () -> new ItemStackHandler(18));
-		}
+		@Override
+		public boolean canRender() { return true; }
 	}
 }

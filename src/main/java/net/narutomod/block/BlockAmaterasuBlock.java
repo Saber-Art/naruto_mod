@@ -1,5 +1,8 @@
 package net.narutomod.block;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -360,13 +363,16 @@ public class BlockAmaterasuBlock extends ElementsNarutomodMod.ModElement {
 
 		@Override
 		public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-			if (!worldIn.isAreaLoaded(pos, 2)) {
+			if (!worldIn.isAreaLoaded(pos, 2))
+ {
 				return;
 			}
-			if (!this.canPlaceBlockAt(worldIn, pos)) {
+			if (!this.canPlaceBlockAt(worldIn, pos))
+ {
 				worldIn.setBlockToAir(pos);
 			}
-			if (!pos.equals(this.blockPos)) {
+			if (!pos.equals(this.blockPos))
+ {
 				this.blockPos = pos;
 				this.world = worldIn;
 			}
@@ -380,7 +386,8 @@ public class BlockAmaterasuBlock extends ElementsNarutomodMod.ModElement {
 			worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn) + rand.nextInt(10));
 			/*if (!flag) {
 				if (!this.canNeighborCatchFire(worldIn, pos)) {
-					if (!worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP)) {
+					if (!worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP))
+ {
 						worldIn.setBlockToAir(pos);
 					}
 					return;
@@ -389,7 +396,8 @@ public class BlockAmaterasuBlock extends ElementsNarutomodMod.ModElement {
 					worldIn.setBlockToAir(pos);
 					return;
 				}
-			}*/
+			}
+*/
 			//if (!this.canCatchFire(worldIn, pos.down(), EnumFacing.UP) && i >= 15) {
 			if (!worldIn.getBlockState(pos.down()).getBlock().isFireSource(worldIn, pos.down(), EnumFacing.UP) && i >= 15) {
 				worldIn.setBlockToAir(pos);
@@ -408,7 +416,8 @@ public class BlockAmaterasuBlock extends ElementsNarutomodMod.ModElement {
 					for (int i2 = 0; i2 <= 4; ++i2) {
 						if (k != 0 || i2 != 0 || l != 0) {
 							int j1 = 300;
-							if (i2 > 1) {
+							if (i2 > 1)
+ {
 								j1 += (i2 - 1) * 100;
 							}
 							BlockPos blockpos = pos.add(k, i2, l);
@@ -439,10 +448,12 @@ public class BlockAmaterasuBlock extends ElementsNarutomodMod.ModElement {
 			if (random.nextInt(chance) < this.getFlammability(worldIn.getBlockState(atPos).getBlock())) {
 				IBlockState iblockstate = worldIn.getBlockState(atPos);
 				int j = age + random.nextInt(AGING_DELAY+1) / AGING_DELAY;
-				if (j > 15) j = 15;
+				if (j > 15)
+ j = 15;
 				worldIn.setBlockState(atPos, this.getDefaultState().withProperty(AGE, Integer.valueOf(j)), 3);
 				setLevel(worldIn, atPos, this.getLevel(worldIn, ogPos));
-				if (iblockstate.getBlock() == Blocks.TNT) {
+				if (iblockstate.getBlock() == Blocks.TNT)
+ {
 					Blocks.TNT.onBlockDestroyedByPlayer(worldIn, atPos, iblockstate.withProperty(BlockTNT.EXPLODE, Boolean.valueOf(true)));
 				}
 			}
@@ -450,7 +461,8 @@ public class BlockAmaterasuBlock extends ElementsNarutomodMod.ModElement {
 
 		private boolean canNeighborCatchFire(World worldIn, BlockPos pos) {
 			for (final EnumFacing enumfacing : EnumFacing.values()) {
-				if (this.canCatchFire(worldIn, pos.offset(enumfacing), enumfacing.getOpposite())) {
+				if (this.canCatchFire(worldIn, pos.offset(enumfacing), enumfacing.getOpposite()))
+ {
 					return true;
 				}
 			}
@@ -458,11 +470,13 @@ public class BlockAmaterasuBlock extends ElementsNarutomodMod.ModElement {
 		}
 
 		private int getNeighborEncouragement(World worldIn, BlockPos pos) {
-			if (!worldIn.isAirBlock(pos)) {
+			if (!worldIn.isAirBlock(pos))
+ {
 				return 0;
 			}
 			int i = 0;
-			for (EnumFacing enumfacing : EnumFacing.values()) {
+			for (EnumFacing enumfacing : EnumFacing.values())
+ {
 				i = Math.max(this.getEncouragement(worldIn.getBlockState(pos.offset(enumfacing)).getBlock()), i);
 			}
 			return i;
@@ -483,6 +497,23 @@ public class BlockAmaterasuBlock extends ElementsNarutomodMod.ModElement {
 
 		@Override
 		public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
+
+			if (entityIn instanceof EntityPlayer) {
+				ItemStack helmet = ((EntityPlayer) entityIn).inventory.armorInventory.get(3);
+				if (helmet != ItemStack.EMPTY) {
+					if (helmet.hasTagCompound()) {
+						NBTTagCompound tag = helmet.getTagCompound();
+						if (tag.hasKey("MS")) {
+							if (tag.getString("MS").equalsIgnoreCase("sasuke")) {
+								((EntityLivingBase) entityIn).removePotionEffect(PotionAmaterasuFlame.potion);
+								(entityIn).extinguish();
+								return;
+							}
+						}
+					}
+				}
+			}
+
 			if (!worldIn.isRemote && entityIn instanceof EntityLivingBase) {
 				int amp = this.getLevel(worldIn, pos);
 				((EntityLivingBase)entityIn).addPotionEffect(new PotionEffect(PotionAmaterasuFlame.potion, 10000, amp, false, false));

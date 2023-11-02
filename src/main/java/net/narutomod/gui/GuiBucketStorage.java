@@ -2,11 +2,18 @@
 package net.narutomod.gui;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.inventory.*;
+import net.minecraft.item.ItemAppleGold;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import net.narutomod.item.*;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.input.Keyboard;
 
@@ -24,15 +31,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Container;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.GuiButton;
 
+import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 import java.util.Map;
 import java.util.HashMap;
@@ -52,12 +56,30 @@ public class GuiBucketStorage extends ElementsNarutomodMod.ModElement {
 		elements.addNetworkMessage(GUIButtonPressedMessageHandler.class, GUIButtonPressedMessage.class, Side.SERVER);
 		elements.addNetworkMessage(GUISlotChangedMessageHandler.class, GUISlotChangedMessage.class, Side.SERVER);
 	}
+
+	private static boolean isValidItem(@Nonnull ItemStack stack) {
+		ItemStack candybar = new ItemStack(ItemCandyBar.block, 1);
+		ItemStack candycorn = new ItemStack(ItemCandyCorn.block, 1);
+		ItemStack candyghost = new ItemStack(ItemCandyGhost.block, 1);
+		ItemStack lollypop = new ItemStack(ItemCandyLollypop.block, 1);
+		ItemStack peanutbuttercup = new ItemStack(ItemCandyPeanutButterCup.block, 1);
+
+		if (stack.getItem() == candybar.getItem() || stack.getItem() == candycorn.getItem() || stack.getItem() == candyghost.getItem() ||
+			stack.getItem() == lollypop.getItem() || stack.getItem() == peanutbuttercup.getItem()
+		) {
+			return true;
+		}
+		return false;
+	}
+
 	public static class GuiContainerMod extends Container implements Supplier<Map<Integer, Slot>> {
 		private IItemHandler internal;
 		private World world;
 		private EntityPlayer entity;
 		private int x, y, z;
 		private boolean bound = false;
+		private ItemStack stack;
+
 		private Map<Integer, Slot> customSlots = new HashMap<>();
 		public GuiContainerMod(World world, int x, int y, int z, EntityPlayer player) {
 			this.world = world;
@@ -65,16 +87,37 @@ public class GuiBucketStorage extends ElementsNarutomodMod.ModElement {
 			this.x = x;
 			this.y = y;
 			this.z = z;
-			//this.internal = new ItemStackHandler(18);
+			this.internal = new ItemStackHandler(18);
 			BlockPos pos = new BlockPos(x,y,z);
-			TileEntity ent = world.getTileEntity(new BlockPos(x, y, z));
-			if (ent != null) {
-				if (ent.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
-					ItemStackHandler capability = (ItemStackHandler) ent.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-					this.internal = capability;
-					this.bound = true;
-				}
+
+			ItemStack main_Stack = player.getHeldItem(EnumHand.MAIN_HAND);
+			ItemStack offhand_Stack = player.getHeldItem(EnumHand.OFF_HAND);
+
+			ItemStack invStack = null;
+			if (main_Stack.getItem() == new ItemStack(ItemHalloweenBucket.block).getItem()) {
+				invStack = main_Stack;
+			} else if (offhand_Stack.getItem() == new ItemStack(ItemHalloweenBucket.block).getItem()) {
+				invStack = offhand_Stack;
 			}
+
+			if (invStack != null) {
+
+				ItemHalloweenBucket.ItemCustom inv = new ItemHalloweenBucket.ItemCustom();
+
+				ItemStackHandler capability = inv.getInv(invStack);
+				this.internal = capability;
+				this.bound = true;
+				this.stack = invStack;
+
+				//if (invStack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
+				//	ItemStackHandler capability = (ItemStackHandler) invStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+				//	this.internal = capability;
+				//	this.bound = true;
+				//} else {
+				//	System.out.println("ERROR GETTING CAPABILITY");
+				//}
+			}
+
 			/*
 			this.internal = new InventoryBasic("", true, 18);
 			TileEntity ent = world.getTileEntity(new BlockPos(x, y, z));
@@ -83,40 +126,112 @@ public class GuiBucketStorage extends ElementsNarutomodMod.ModElement {
 
 			 */
 			this.customSlots.put(0, this.addSlotToContainer(new SlotItemHandler(internal, 0, 7, 26) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(1, this.addSlotToContainer(new SlotItemHandler(internal, 1, 25, 26) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(2, this.addSlotToContainer(new SlotItemHandler(internal, 2, 43, 26) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(3, this.addSlotToContainer(new SlotItemHandler(internal, 3, 61, 26) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(4, this.addSlotToContainer(new SlotItemHandler(internal, 4, 79, 26) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(5, this.addSlotToContainer(new SlotItemHandler(internal, 5, 97, 26) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(6, this.addSlotToContainer(new SlotItemHandler(internal, 6, 115, 26) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(7, this.addSlotToContainer(new SlotItemHandler(internal, 7, 133, 26) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(8, this.addSlotToContainer(new SlotItemHandler(internal, 8, 151, 26) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(9, this.addSlotToContainer(new SlotItemHandler(internal, 9, 7, 44) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(10, this.addSlotToContainer(new SlotItemHandler(internal, 10, 25, 44) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(11, this.addSlotToContainer(new SlotItemHandler(internal, 11, 43, 44) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(12, this.addSlotToContainer(new SlotItemHandler(internal, 12, 61, 44) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(13, this.addSlotToContainer(new SlotItemHandler(internal, 13, 79, 44) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(14, this.addSlotToContainer(new SlotItemHandler(internal, 14, 97, 44) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(15, this.addSlotToContainer(new SlotItemHandler(internal, 15, 115, 44) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(16, this.addSlotToContainer(new SlotItemHandler(internal, 16, 133, 44) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			this.customSlots.put(17, this.addSlotToContainer(new SlotItemHandler(internal, 17, 151, 44) {
+				@Override
+				public boolean isItemValid(@Nonnull ItemStack stack) {
+					return isValidItem(stack);
+				}
 			}));
 			int si;
 			int sj;
@@ -137,12 +252,33 @@ public class GuiBucketStorage extends ElementsNarutomodMod.ModElement {
 		}
 
 		@Override
+		public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player) {
+
+			Slot slot = slotId < 0 || slotId >= inventorySlots.size() ? null : inventorySlots.get(slotId);
+
+			// Check if the slot contains the specific item you want to prevent clicking
+			if (slot != null && !slot.getStack().isEmpty() && slot.getStack().getItem() == new ItemStack(ItemHalloweenBucket.block, 1).getItem()) {
+				return ItemStack.EMPTY;  // Cancel the click
+			}
+
+			return super.slotClick(slotId, dragType, clickTypeIn, player);
+		}
+
+		@Override
 		public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
 			ItemStack itemstack = ItemStack.EMPTY;
 			Slot slot = (Slot) this.inventorySlots.get(index);
+
+			if (slot != null) {
+				if (slot.getStack().getItem() == new ItemStack(ItemHalloweenBucket.block, 1).getItem()) {
+					return ItemStack.EMPTY;
+				}
+			}
+
 			if (slot != null && slot.getHasStack()) {
 				ItemStack itemstack1 = slot.getStack();
 				itemstack = itemstack1.copy();
+
 				if (index < 18) {
 					if (!this.mergeItemStack(itemstack1, 18, this.inventorySlots.size(), true)) {
 						return ItemStack.EMPTY;
@@ -279,6 +415,9 @@ public class GuiBucketStorage extends ElementsNarutomodMod.ModElement {
 						}
 					}
 				}
+			} else {
+				ItemHalloweenBucket.ItemCustom inv = new ItemHalloweenBucket.ItemCustom();
+				inv.setInv(this.stack, (ItemStackHandler) this.internal);
 			}
 
 			/*

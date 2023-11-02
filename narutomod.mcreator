@@ -1,6 +1,6 @@
 {
   "id_map": {
-    "ENTITY": 431,
+    "ENTITY": 437,
     "DIMENSION": 13,
     "GUI": 65
   },
@@ -7276,6 +7276,225 @@
       "locked_code": true,
       "ids": {},
       "registry_name": "halloween_bucket"
+    },
+    {
+      "name": "WoodDragon",
+      "type": "mob",
+      "sortid": 864,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {
+        "0": 432,
+        "1": 433
+      },
+      "registry_name": "wood_dragon"
+    },
+    {
+      "name": "CandyLollypop",
+      "type": "food",
+      "sortid": 866,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "candy_lollypop"
+    },
+    {
+      "name": "CandyPeanutButterCup",
+      "type": "food",
+      "sortid": 867,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "candy_peanut_butter_cup"
+    },
+    {
+      "name": "CandyGhost",
+      "type": "food",
+      "sortid": 868,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "candy_ghost"
+    },
+    {
+      "name": "CandyBar",
+      "type": "food",
+      "sortid": 869,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "candy_bar"
+    },
+    {
+      "name": "CandyCorn",
+      "type": "food",
+      "sortid": 870,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "candy_corn"
+    },
+    {
+      "name": "HarvestScythe",
+      "type": "tool",
+      "sortid": 871,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "harvest_scythe"
+    },
+    {
+      "name": "PumpkinJack",
+      "type": "mob",
+      "sortid": 872,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {
+        "0": 434,
+        "1": 435
+      },
+      "registry_name": "pumpkin_jack"
+    },
+    {
+      "name": "GeckolibInit",
+      "type": "code",
+      "sortid": 873,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "geckolib_init"
+    },
+    {
+      "name": "HarvestScytheThrown",
+      "type": "mob",
+      "sortid": 874,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {
+        "0": 436,
+        "1": 437
+      },
+      "registry_name": "harvest_scythe_thrown"
+    },
+    {
+      "name": "ThrownHarvestScytheRightClickedInAir",
+      "type": "procedure",
+      "sortid": 875,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "thrown_harvest_scythe_right_clicked_in_air",
+      "metadata": {
+        "dependencies": []
+      }
+    },
+    {
+      "name": "ThrownHarvestScythe",
+      "type": "item",
+      "sortid": 875,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "thrown_harvest_scythe"
+    },
+    {
+      "name": "ThrownHarvestScythePoisoned",
+      "type": "item",
+      "sortid": 876,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "thrown_harvest_scythe_poisoned"
+    },
+    {
+      "name": "WitchHat",
+      "type": "armor",
+      "sortid": 877,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "witch_hat",
+      "metadata": {
+        "eh": true,
+        "el": false,
+        "eb": false,
+        "ec": false
+      }
+    },
+    {
+      "name": "WitchHatRed",
+      "type": "armor",
+      "sortid": 878,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "witch_hat_red",
+      "metadata": {
+        "eh": true,
+        "el": false,
+        "eb": false,
+        "ec": false
+      }
+    },
+    {
+      "name": "SnowHorns",
+      "type": "armor",
+      "sortid": 879,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "snow_horns",
+      "metadata": {
+        "eh": true,
+        "el": false,
+        "eb": false,
+        "ec": false
+      }
+    },
+    {
+      "name": "DemonHorns",
+      "type": "armor",
+      "sortid": 880,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "demon_horns",
+      "metadata": {
+        "eh": true,
+        "el": false,
+        "eb": false,
+        "ec": false
+      }
+    },
+    {
+      "name": "Coffin",
+      "type": "armor",
+      "sortid": 881,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "coffin",
+      "metadata": {
+        "eh": false,
+        "el": false,
+        "eb": false,
+        "ec": true
+      }
+    },
+    {
+      "name": "CoffinOpen",
+      "type": "armor",
+      "sortid": 882,
+      "compiles": true,
+      "locked_code": true,
+      "ids": {},
+      "registry_name": "coffin_open",
+      "metadata": {
+        "eh": false,
+        "el": false,
+        "eb": false,
+        "ec": true
+      }
     }
   ],
   "variable_elements": [
@@ -8236,6 +8455,22 @@
       ],
       "category": "master",
       "subtitle": ""
+    },
+    {
+      "name": "wood-dragon",
+      "files": [
+        "wood-dragon"
+      ],
+      "category": "master",
+      "subtitle": "Wood Dragon"
+    },
+    {
+      "name": "pumpkin-roar",
+      "files": [
+        "pumpkinroar"
+      ],
+      "category": "master",
+      "subtitle": "Jack Roars"
     }
   ],
   "language_map": {
@@ -8261,6 +8496,7 @@
       "item.scroll_water_dragon.name": "Water Release - Water Dragon Bullet",
       "entity.tailed_beast.name": "Tailed Beast",
       "item.gunbai.name": "Gunbai",
+      "item.coffin_openhelmet.name": "Coffin Open Helmet",
       "entity.itachi.name": "Itachi Uchiha",
       "item.scroll_lightning_panther.name": "Lightning Release: Black Panther",
       "item.clothes_raikagehelmet.name": "Raikage Hat",
@@ -8322,6 +8558,7 @@
       "item.scroll_sealing_4_symbols.name": "Four Symbols Sealing Jutsu",
       "chattext.biju.playerisjinchuriki": "%s is %s\u0027s jinchuriki",
       "item.clothes_hokagebody.name": "Hokage Robe",
+      "item.candy_corn.name": "Candy Corn",
       "tooltip.6psenjutsu.shield": "Truth Seeking Ball: Shield",
       "lingering_potion.effect.amaterasuflame": "Lingering Amaterasu",
       "entity.susanooclothed.name": "Susanoo",
@@ -8348,6 +8585,7 @@
       "advancements.sharinganopened.title": "Sharingan Activated",
       "tipped_arrow.effect.chakra_regeneration": "Arrow of Chakra Regeneration",
       "advancements.kekkei_tota_awakened.descr": "Kekkei Tota is an advanced branch of jutsu that is more advanced than kekkei genkai. The only known example is Dust Release, a combination of three different nature transformations earth, wind, and fire.",
+      "item.snow_hornshelmet.name": "Frost Blood Horns",
       "entity.water_prison.name": "Water Prison jutsu",
       "item.inton.name": "Yin Release",
       "subtitles.lasercircus": "",
@@ -8373,6 +8611,7 @@
       "tooltip.mokuton.leftclick": "Wood Bind Permanent Burial",
       "item.kunai_hiraishin.name": "Kunai Hiraishin",
       "entity.ground_shock.name": "Ground Shock",
+      "item.witch_hat_redlegs.name": "Witch Hat Red Leggings",
       "item.chokuto.name": "Chokuto",
       "item.gourdbody.name": "Iron Sand Gourd",
       "subtitles.fourtails_defeat": "",
@@ -8394,12 +8633,14 @@
       "key.mcreator.category": "Naruto Mod",
       "item.ryo_1000.name": "Ryo 1,000",
       "chattext.outerpath.hasjinchuriki": "Unable to summon Ten Tails, it is sealed in a Jinchuriki.",
+      "subtitles.wood-dragon": "Wood Dragon",
       "subtitles.windecho": "",
       "item.scroll_hiraishin.name": "Flying Thunder God Jutsu",
       "chattext.chibakutensei": "Chibaku Tensei!",
       "chattext.outerpath.notenoughxp": "You do not have enough experience.",
       "entity.ninja_suna.name": "Ninja Suna",
       "effect.chakra_enhanced_strength": "Chakra Enhanced Strength",
+      "tooltip.pathmerge.name": "Rinne Path Merge",
       "item.biju_cloakhelmet.name": "Biju Cloak Helmet",
       "advancements.achievementmedicalgenin.title": "Medical Genin",
       "item.kabutowari_axe.name": "Kabutowari Axe",
@@ -8411,6 +8652,7 @@
       "subtitles.dragon_roar": "",
       "entity.scalable_projectile.name": "Scalable Projectile",
       "entity.ninja_kiri.name": "Ninja Kiri",
+      "item.witch_hat_redbody.name": "Witch Hat Red Body",
       "item.scroll_earth_sandwich.name": "Earth Release - Mountain sandwich",
       "subtitles.senbon_impact": "",
       "subtitles.rasengan_during": "",
@@ -8422,6 +8664,7 @@
       "item.ninja_armor_amelegs.name": "Ninja Suit (Amegakure)",
       "entity.suitonstream.name": "Water Bullet Technique",
       "item.clothes_raikagebody.name": "Clothes Raikage Body",
+      "item.candy_ghost.name": "Candy Ghost",
       "entity.ninja_mob.name": "Ninja Mob",
       "tooltip.senjutsu.type": "Sage Mode type: ",
       "item.tea.name": "Tea",
@@ -8430,10 +8673,12 @@
       "entity.sakura_haruno.name": "Sakura Haruno",
       "entity.lightning_beast.name": "Lightning Beast Tracking Fang",
       "tipped_arrow.effect.corrosion": "Arrow of Corrosion",
+      "subtitles.pumpkinroar": "Jack Roars",
       "entity.hiding_in_ash.name": "Hiding In Ash Jutsu",
       "item.ashbones.name": "All-Killing Ash Bones",
       "item.zabuza_sword.name": "Executioner Blade",
       "entity.bugball.name": "Secret jutsu: Beetle Sphere",
+      "item.snow_hornsboots.name": "Snow Horns Boots",
       "entity.snake_8_heads.name": "8-branch Jutsu",
       "entity.transformation_jutsu.name": "Transformation Jutsu",
       "entity.ninja_iwa.name": "Ninja Iwa",
@@ -8458,6 +8703,7 @@
       "chattext.senjutsu.denied": "%s says no!",
       "advancements.yooton_acquired.descr": "Lava Release (\"Corrosion Style\" or \"Lava Style\") is a nature transformation kekkei genkai, a combination of fire and earth.",
       "item.scroll_kikaichu_sphere.name": "Hiden Technique: Kikaichu Sphere",
+      "entity.pumpkin_jack.name": "Pumpkin Jack",
       "tooltip.general.powerupkey": "Press [Switch Jutsu] to cycle through abilities",
       "subtitles.charge_ground": "",
       "entity.tailbeastball.name": "Tail beast ball",
@@ -8468,6 +8714,7 @@
       "item.clothes_tsuchikagebody.name": "Clothes Tsuchikage Body",
       "entity.kakashi.name": "Kakashi",
       "item.scythe_hidan_thrown.name": "Scythe 3-blade",
+      "item.demon_hornsboots.name": "Demon Horns Boots",
       "item.mangekyosharinganeternalhelmet.name": "Eternal Mangekyo Sharingan",
       "item.biju_map.name": "Tailed Beast Map",
       "entity.earth_blocks.name": "Earth Blocks",
@@ -8485,6 +8732,7 @@
       "entity.pretashield.name": "Preta Shield",
       "entity.sand_bind.name": "Sand Binding / [Left click] Sand Funeral",
       "item.ninja_armor_kumoboots.name": "Ninja Boots (Kumogakure)",
+      "item.candy_lollypop.name": "Lollypop",
       "entity.nine_tails.name": "Kurama",
       "chattext.mightguy.interact2": "Now is the time to show me your ninja way. Protect the villagers at all costs!",
       "chattext.mightguy.interact1": "So you want to be a ninja eh? Then you must prove that you can always stand by your ninja way, and to always protect the ones you care the most. Let your power of youth burn bright!",
@@ -8505,6 +8753,7 @@
       "tooltip.futton.musthave": "Must have Water \u0026 Fire release",
       "item.curryand_rice.name": "Curry and Rice",
       "entity.enma.name": "Monkey King: Enma",
+      "item.thrown_harvest_scythe.name": "Thrown Harvest Scythe",
       "entity.chibaku_tensei_ball.name": "Chibaku Tensei Ball",
       "item.steam_armorbody.name": "Steam Armor Shirt",
       "subtitles.kairikimuso": "",
@@ -8560,8 +8809,10 @@
       "item.tenseigan_chakra_mode.name": "Tenseigan Chakra Mode",
       "advancements.shakuton_acquired.descr": "Scorch Release is a nature transformation kekkei genkai, a combination of fire and wind.",
       "lingering_potion.effect.paralysis": "Lingering Paralysis",
+      "tooltip.pathseperation.name": "Rinne Path Seperation",
       "advancements.ninjaachievement.descr": "You may now begin your ninja training!",
       "advancements.hyoton_acquired.title": "Ice Release Acquired",
+      "item.thrown_harvest_scythe_poisoned.name": "Thrown Harvest Scythe Poisoned",
       "item.yagura_staff.name": "Yagura Staff",
       "item.scythe_hidan.name": "Scythe 3-blade",
       "subtitles.fourtails_idle2": "",
@@ -8598,6 +8849,7 @@
       "advancements.byakuganopened.descr": "Byakugan is regarded as one of the \"Three Great Dojutsu\", the others being the Sharingan and the Rinnegan.",
       "subtitles.dingding": "",
       "chattext.specialevent.villagesiege": "Event alert: A siege is coming!",
+      "subtitles.pumpkin_roar": "Jack Roars",
       "item.scroll_earth_golem.name": "Earth Release: Golem Jutsu",
       "entity.false_darkness.name": "False Darkness",
       "entity.jintoncube.name": "Dust Release: Boundary Dismantling Jutsu - Cube",
@@ -8647,6 +8899,7 @@
       "chattext.rinnegan.path5": "Outer Path",
       "death.attack.ninjutsu_damage": "%1$s was killed by %2$s using ninjutsu",
       "item.ninja_armor_kiribody.name": "Flak Jacket (Kirigakure)",
+      "item.witch_hat_redboots.name": "Witch Hat Red Boots",
       "entity.poison_mist.name": "Poison Mist",
       "entity.spike.name": "Spike",
       "advancements.mokuton_acquired.title": "Wood Release Acquired",
@@ -8673,6 +8926,7 @@
       "item.hiramekarei_sword.name": "Hiramekarei Sword",
       "potion.effect.amaterasuflame": "Amaterasu",
       "item.ninja_armor_kumohelmet.name": "Forehead Protector (Kumogakure)",
+      "item.witch_hatboots.name": "Witch Hat Boots",
       "item.samehada.name": "Samehada",
       "advancements.futton_acquired.descr": "Boil Release (Futton, Vapour Style) is a nature transformation kekkei genkai, a combination of fire and water.",
       "subtitles.yominuma": "",
@@ -8688,6 +8942,7 @@
       "tile.kamuiblock.name": "Kamui Block",
       "subtitles.bijudama": "",
       "item.ninja_armor_anbulegs.name": "Ninja Pants (Anbu)",
+      "item.snow_hornslegs.name": "Snow Horns Leggings",
       "item.katon.name": "Fire Release",
       "entity.two_tails.name": "Matatabi",
       "item.ninja_armor_anbubody.name": "Chest Armor (Anbu)",
@@ -8697,6 +8952,7 @@
       "entity.katonfireball.name": "Great Fireball jutsu",
       "potion.effect.chakra_regeneration": "Chakra Regeneration",
       "tooltip.senjutsu.rasengan": "Sage Art: Ultra-Big Ball Rasengan",
+      "item.snow_hornsbody.name": "Snow Horns Body",
       "item.scroll_chidori.name": "Lightning Release - Chidori",
       "subtitles.ice_shoot_small": "",
       "item.ninjutsu.amenotejikara": "Amenotejikara",
@@ -8714,6 +8970,7 @@
       "item.mask_obito_warboots.name": "Mask Obito War Boots",
       "item.uchihabody.name": "Uchiha Body",
       "item.sage_staff.name": "Truth Seeking Shakujo",
+      "subtitles.pumpkin-roar": "Jack Roars",
       "entity.haku.name": "Haku",
       "entity.eight_tails.name": "Gyuuki",
       "entity.scorchorb.name": "Spawn Scorch Orb",
@@ -8735,6 +8992,7 @@
       "entity.sealing_chains.name": "Adamantine Sealing Chains / [SHIFT + R-click] to Dispel",
       "subtitles.senbon": "",
       "subtitles.fourtails_hurt": "",
+      "item.witch_hatlegs.name": "Witch Hat Leggings",
       "advancements.mangekyosharinganopened.title": "Mangekyo Sharingan Acquired!",
       "tooltip.general.rightclick": "Right click: ",
       "item.six_path_senjutsu.name": "Six Path Senjutsu",
@@ -8750,6 +9008,7 @@
       "item.claw.name": "Triple bladed claw",
       "advancements.openedgates.title": "Power of Youth!",
       "item.clothes_hokagehelmet.name": "Hokage Hat",
+      "entity.harvest_scythe_thrown.name": "Harvest Scythe Thrown",
       "tile.explosive_tag.name": "Explosive Tag",
       "item.scroll_water_stream.name": "Water Release - Water Bullet",
       "entity.altcamview.name": "Cam",
@@ -8761,6 +9020,8 @@
       "item.senjutsu.name": "Senjutsu",
       "entity.entityhirudora.name": "Hirudora (Daytime Tiger)",
       "advancements.shakuton_acquired.title": "Scorch Release Acquired",
+      "item.demon_hornshelmet.name": "Demonic Horns",
+      "item.coffinlegs.name": "Coffin Leggings",
       "tooltip.ranton.musthave": "Must have Lightning \u0026 Water release",
       "item.clothes_tsuchikagelegs.name": "Clothes Tsuchikage Leggings",
       "item.clothes_kazekagebody.name": "Kage Robe",
@@ -8768,6 +9029,7 @@
       "entity.shadow_imitation.name": "Shadow Imitation / [Jutsu2] to dispel",
       "item.black_receiver.name": "Black Receiver",
       "lingering_potion.effect.corrosion": "Lingering Corrosion",
+      "item.coffin_openboots.name": "Coffin Open Boots",
       "effect.reach": "Reach",
       "entity.ninja_konoha.name": "Ninja Konoha",
       "item.scroll_poison_mist.name": "Medical Ninjutsu - Poison Mist jutsu",
@@ -8790,6 +9052,7 @@
       "entity.toad_summon.name": "Toad summon",
       "death.attack.senjutsu_damage": "%1$s was killed by %2$s using senjutsu",
       "advancements.tensei_byakugan_activated.title": "RinneSharingan Activated",
+      "item.witch_hathelmet.name": "Witch Hat",
       "item.halloween_bucket.name": "Halloween Bucket",
       "item.military_rations_pill_gold.name": "Military Rations Pill - Gold",
       "item.byakurinnesharinganbody.name": "",
@@ -8804,6 +9067,7 @@
       "item.scroll_puppet.name": "Puppet Jutsu",
       "item.clothes_hokagelegs.name": "",
       "entity.lightning_panther.name": "Black Panther",
+      "item.candy_bar.name": "Candy Bar",
       "potion.effect.reach": "Reach",
       "scoreboard.objective.siege_kills": "Siege Kills",
       "lingering_potion.effect.feather_falling": "Lingering Feather Falling",
@@ -8818,7 +9082,9 @@
       "entity.gamabunta.name": "Gamabunta",
       "item.kunai.name": "Kunai",
       "item.clothes_raikageboots.name": "Clothes Raikage Boots",
+      "item.witch_hatbody.name": "Witch Hat Body",
       "entity.entityearthwall.name": "Earth Wall Jutsu",
+      "item.coffinbody.name": "Coffin",
       "entity.inton_raiha.name": "Sage Art: Yin Release Lightning Dispatch",
       "subtitles.isobu_hurt": "",
       "item.scroll_body_replacement.name": "Body Replacement jutsu",
@@ -8829,6 +9095,7 @@
       "itemGroup.tabmodtab": "Naruto",
       "item.scroll_healing.name": "Medical Ninjutsu - Healing jutsu",
       "item.totsuka_sword.name": "Totsuka Sword",
+      "item.demon_hornslegs.name": "Demon Horns Leggings",
       "subtitles.hand_press": "",
       "tooltip.shakuton.scorchkill": "Steam Kill",
       "tooltip.shikotsumyaku.dancecamellia": "Camellia Dance",
@@ -8863,6 +9130,7 @@
       "entity.entityngdragon.name": "Yagai (Night Guy)",
       "item.ninja_armor_obito_warbody.name": "Obito Suit (4th Ninja War)",
       "item.scroll_fire_stream.name": "Fire Release - Great Flame",
+      "item.candy_peanut_butter_cup.name": "Peanut Butter Cup",
       "item.ninja_armor_kumobody.name": "Flak Jacket (Kumogakure)",
       "entity.futonchakraflow.name": "Chakra Flow",
       "entity.giant_dog_2h.name": "Giant Dog",
@@ -8878,6 +9146,7 @@
       "tipped_arrow.effect.heaviness": "Arrow of Heaviness",
       "subtitles.woodgrow": "",
       "entity.ice_toggle.name": "Toggle Ice Walk",
+      "item.coffin_openbody.name": "Coffin Open",
       "tooltip.senjutsu.sagemode": "Sage Mode",
       "item.anbu_robeboots.name": "Anbu Robe Boots",
       "subtitles.suikodannojutsu": "",
@@ -8898,7 +9167,9 @@
       "tooltip.mrp.goldtip": "Restores 500 chakra. Regenerates 5% chakra every second for 30 seconds.",
       "tipped_arrow.effect.chakra_enhanced_strength": "Arrow of Chakra Enhanced Strength",
       "item.ninja_armor_konohahelmet.name": "Forehead Protector (Konoha)",
+      "item.coffinboots.name": "Coffin Boots",
       "item.scroll_enhanced_strength.name": "Medical Ninjutsu - Chakra Enhanced Strength",
+      "item.demon_hornsbody.name": "Demon Horns Body",
       "entity.susanooskeleton.name": "Susanoo Skeleton",
       "entity.hiraishin.name": "Flying Thunder God Jutsu",
       "tooltip.jiton.musthave": "Must have Earth \u0026 Wind release",
@@ -8906,6 +9177,7 @@
       "entity.specialeffect.name": "Special Effect",
       "effect.flight": "Flight",
       "item.tenseiganbody.name": "Tenseigan Chakra",
+      "item.witch_hat_redhelmet.name": "Red Witch Hat",
       "item.rinneganlegs.name": "Rinne Sharingan Leggings",
       "item.dojutsu.name": "Dojutsu",
       "entity.entityjitonshield.name": "Shield of Sand",
@@ -8913,6 +9185,7 @@
       "entity.three_tails.name": "Isobu",
       "entity.earth_spears.name": "Earth Flow Spears",
       "subtitles.magatama_spin": "",
+      "item.coffinhelmet.name": "Coffin Helmet",
       "item.kabutowari.name": "Kabutowari",
       "tooltip.general.shift": "Press [Switch Jutsu] to switch jutsu",
       "item.ninja_armor_sunalegs.name": "Ninja Pants (Sunagakure)",
@@ -8927,12 +9200,15 @@
       "entity.gedo_statue.name": "Demonic Statue of the Outer Path",
       "entity.water_shockwave.name": "Exploding Water Shockwave",
       "entity.puppet_hiruko.name": "Hiruko Puppet",
+      "item.coffin_openlegs.name": "Coffin Open Leggings",
       "item.ninja_armor_kumolegs.name": "Ninja Pants (Kumogakure)",
       "entity.puppet.name": "Puppet",
       "splash_potion.effect.paralysis": "Splash Paralysis",
       "entity.ranton_koga.name": "Sage Art: Storm Release Light Fang",
+      "entity.wood_dragon.name": "Wood Dragon",
       "item.mask_obito_warhelmet.name": "Mask Obito (4th Ninja War)",
       "subtitles.intonraiha": "",
+      "item.harvest_scythe.name": "Harvest Scythe",
       "entity.snake_summon.name": "Snake Summon",
       "key.mcreator.chakra_control": "Chakra Control",
       "entity.lava_chakra_mode.name": "Lava Chakra Mode",

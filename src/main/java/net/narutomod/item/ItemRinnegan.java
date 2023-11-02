@@ -1,5 +1,6 @@
 package net.narutomod.item;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
@@ -136,6 +137,11 @@ public class ItemRinnegan extends ElementsNarutomodMod.ModElement {
 			public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 				if (isRinnesharinganActivated(stack))
 					return "narutomod:textures/rinnesharinganhelmet.png";
+
+				if (stack.hasTagCompound()) {
+					NBTTagCompound tag = stack.getTagCompound();
+				}
+
 				return "narutomod:textures/rinneganhelmet.png";
 			}
 
@@ -282,7 +288,8 @@ public class ItemRinnegan extends ElementsNarutomodMod.ModElement {
 				this.armorModel.robeRightArm.showModel = show;
 				this.armorModel.robeLeftArm.showModel = show;
 				this.armorModel.backSpikes.showModel = !show;
-				this.armorModel.isSneak = living.isSneaking();
+
+				this.armorModel.isSneak = living.isSneaking();
 				this.armorModel.isRiding = living.isRiding();
 				this.armorModel.isChild = living.isChild();
 				return this.armorModel;

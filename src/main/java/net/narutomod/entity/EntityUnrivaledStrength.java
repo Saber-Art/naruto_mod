@@ -70,7 +70,7 @@ public class EntityUnrivaledStrength extends ElementsNarutomodMod.ModElement {
 			this.playSound((SoundEvent)SoundEvent.REGISTRY.getObject(new ResourceLocation("narutomod:kairikimuso")), 1f, 1f);
 			PotionEffect effect = userIn.getActivePotionEffect(MobEffects.STRENGTH);
 			userIn.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, this.duration, 
-			 (int)power + (effect != null ? effect.getAmplifier() : -1), false, false));
+			 (int)(power * 0.5) + (effect != null ? effect.getAmplifier() : -1), false, false));
 			effect = userIn.getActivePotionEffect(MobEffects.SPEED);
 			userIn.addPotionEffect(new PotionEffect(MobEffects.SPEED, this.duration, 
 			 (int)(power * 2f) + (effect != null ? effect.getAmplifier() : -1), false, false));
@@ -136,6 +136,7 @@ public class EntityUnrivaledStrength extends ElementsNarutomodMod.ModElement {
 				}
 				if (this.attackTime < 12 && this.target != null && this.target.getDistanceSq(this.user) < 25d) {
 					((EntityPlayer)this.user).attackTargetEntityWithCurrentItem(this.target);
+					//this.target.attackEntityFrom(DamageSource.HOT_FLOOR, 2f);
 					ProcedureUtils.pushEntity(this.user, this.target, 15d, 1.5f);
 					this.target = null;
 				}

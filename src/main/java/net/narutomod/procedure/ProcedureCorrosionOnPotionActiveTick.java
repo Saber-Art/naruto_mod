@@ -35,7 +35,7 @@ public class ProcedureCorrosionOnPotionActiveTick extends ElementsNarutomodMod.M
 		World world = (World) dependencies.get("world");
 		double amp = 0;
 		amp = (double) (amplifier);
-		entity.attackEntityFrom(ItemJutsu.NINJUTSU_DAMAGE, (float) amp + 1f);
+		entity.attackEntityFrom(ItemJutsu.NINJUTSU_DAMAGE, (float) (amp * 0.5f) + 1f);
 		if ((Math.random() <= 0.5)) {
 			world.playSound((EntityPlayer) null, (entity.posX), (entity.posY), (entity.posZ),
 					(net.minecraft.util.SoundEvent) net.minecraft.util.SoundEvent.REGISTRY.getObject(new ResourceLocation("block.fire.extinguish")),

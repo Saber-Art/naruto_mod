@@ -85,6 +85,8 @@ public class EntityNinjaMob extends ElementsNarutomodMod.ModElement {
 	public static final List<Class <? extends Base>> TeamZabuza = Arrays.asList(EntityZabuzaMomochi.EntityCustom.class, EntityHaku.EntityCustom.class);
 	public static final List<Class <? extends Base>> TeamItachi = Arrays.asList(EntityItachi.EntityCustom.class, EntityKisameHoshigaki.EntityCustom.class);
 
+	public static final List<Class <? extends Base>> TeamJack = Arrays.asList(EntityItachi.EntityCustom.class, EntityKisameHoshigaki.EntityCustom.class, EntityPumpkinJack.EntityCustom.class, EntityZabuzaMomochi.EntityCustom.class, EntityHaku.EntityCustom.class);
+
 	public EntityNinjaMob(ElementsNarutomodMod instance) {
 		super(instance, 404);
 	}
